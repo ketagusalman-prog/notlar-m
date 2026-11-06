@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Not Defteri & E-Tablo Takvimli Mobil Portal</title>
+  
+  <!-- PWA & Mobil Uygulama Tanımlamaları -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f172a">
+  
+  <!-- Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-dark: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #ef4444;
+      --accent-purple: #8b5cf6;
+      --sidebar-width: 250px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 70px;
+    }
+
+    /* Desktop Sidebar Nav */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: #0b1120;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      padding: 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand i { font-size: 22px; color: var(--accent-blue); }
+    .brand h2 { font-size: 16px; font-weight: 700; }
+
+    .nav-menu {
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      color: var(--text-muted);
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+    .nav-item.active { background-color: var(--accent-blue); color: #ffffff; font-weight: 600; }
+
+    .status-box {
+      padding: 14px;
+      margin: 14px;
+      background-color: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-rose); }
+    .dot.connected { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+
+    /* Main Container */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      flex-grow: 1;
+      padding: 24px;
+      max-width: calc(100vw - var(--sidebar-width));
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* Buttons & Inputs */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background-color: var(--accent-blue); color: white; }
+    .btn-success { background-color: var(--accent-green); color: white; }
+    .btn-purple { background-color: var(--accent-purple); color: white; }
+    .btn-secondary { background-color: var(--card-dark); color: var(--text-main); border: 1px solid var(--card-border); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      background-color: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: var(--card-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    /* Cards & Notes Grid */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background-color: var(--card-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .note-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
+    .note-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .note-tag {
+      font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase;
+      background-color: rgba(59, 130, 246, 0.2); color: var(--accent-blue);
+    }
+    .note-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .note-body { font-size: 13px; color: var(--text-muted); white-space: pre-wrap; line-height: 1.4; }
+    .note-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--card-border); font-size: 11px; color: var(--text-muted); }
+
+    /* Calendar Grid Layout */
+    .calendar-container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+    }
+
+    .calendar-card { background-color: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .calendar-header h3 { font-size: 15px; font-weight: 700; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+    .cal-day-name { font-size: 10px; font-weight: 700; color: var(--text-muted); padding: 4px 0; }
+    
+    .cal-day {
+      padding: 8px 0;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background-color: rgba(15, 23, 42, 0.5);
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .cal-day:hover { background-color: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); }
+    .cal-day.selected { background-color: var(--accent-blue); color: white; }
+    .cal-day.today { border: 2px solid var(--accent-green) !important; font-weight: 800; color: var(--accent-green); }
+    .cal-day.selected.today { color: white; }
+
+    /* PROFESYONEL RAPOR / ANALİZ SAYFASI BÖLÜMÜ */
+    .daily-report-paper {
+      background-color: #ffffff;
+      color: #0f172a;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      border: 1px solid #e2e8f0;
+      position: relative;
+    }
+
+    .daily-report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .report-brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* U-S KURUMSAL LOGO (Kırmızı Dolgulu, Alt Alta, Tire Yok) */
+    .us-logo-badge {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+    }
+
+    .daily-report-header h2 { 
+      font-size: 18px; 
+      color: #0f172a; 
+      font-weight: 800; 
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    
+    .daily-report-header span { 
+      font-size: 12px; 
+      color: #475569; 
+      font-weight: 600;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ZARİF TEK SATIR ÖZET ŞERİDİ */
+    .compact-metrics-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .compact-metrics-bar span {
+      font-weight: 800;
+      color: #0f172a;
+      background: #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 4px;
+    }
+
+    .report-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 16px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-left: 4px solid #3b82f6;
+      padding-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Tablo Grupları & Sayfa Bazlı Tablolar */
+    .sub-sheet-container {
+      margin-bottom: 20px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .sub-sheet-title {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .table-wrapper { overflow-x: auto; width: 100%; }
+    .report-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+    .report-table th { background-color: #334155; color: #ffffff; border: 1px solid #cbd5e1; padding: 8px 10px; font-weight: 700; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
+    .report-table td { border: 1px solid #cbd5e1; padding: 8px 10px; color: #1e293b; font-weight: 500; font-size: 13px; }
+    .report-table tbody tr:nth-child(even) { background-color: #f8fafc; }
+
+    /* MOBİL İÇİN AKILLI KART DÖNÜŞÜMÜ */
+    .mobile-card-item { display: none; }
+
+    @media (max-width: 768px) {
+      body { padding-bottom: 75px; }
+
+      .sidebar {
+        width: 100%;
+        height: 60px;
+        top: auto; bottom: 0; left: 0; right: 0;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid var(--card-border);
+        background-color: #0b1120;
+      }
+
+      .brand, .status-box { display: none; }
+      
+      .nav-menu {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+      }
+
+      .nav-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 6px;
+        font-size: 10px;
+        border-radius: 6px;
+      }
+
+      .nav-item i { font-size: 18px; }
+
+      .main-content {
+        margin-left: 0;
+        max-width: 100vw;
+        padding: 16px;
+      }
+
+      .calendar-container { grid-template-columns: 1fr; }
+      .header-title { font-size: 18px; }
+      .btn { width: 100%; justify-content: center; }
+      .compact-metrics-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+
+      .desktop-table-view { display: none !important; }
+      .mobile-card-item {
+        display: block;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      }
+      .mobile-card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12.5px;
+        padding: 5px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .mobile-card-row:last-child { border-bottom: none; }
+      .mobile-card-label { font-weight: 700; color: #475569; width: 45%; }
+      .mobile-card-val { font-weight: 600; color: #0f172a; width: 50%; text-align: right; word-break: break-word; }
+    }
+
+    /* PRINT QUERY ENHANCEMENTS */
+    @media print {
+      body { background-color: #ffffff !important; color: #0f172a !important; padding-bottom: 0 !important; font-size: 15px !important; }
+      .sidebar, .btn, .no-print, .modal-overlay, .calendar-card, .header-title, #analysisSearchFormArea { display: none !important; }
+      .main-content { margin-left: 0 !important; max-width: 100% !important; padding: 0 !important; }
+      .calendar-container { grid-template-columns: 1fr !important; }
+      .daily-report-paper { box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; border: none !important; display: block !important; }
+      .page-section { display: none !important; }
+      #calendarSection.active, #analysisSection.active { display: block !important; }
+      .us-logo-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #dc2626 !important; }
+      .sub-sheet-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #1e293b !important; color: #ffffff !important; }
+      .report-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #334155 !important; color: #ffffff !important; font-size: 12px !important; }
+      .report-table td { font-size: 13px !important; padding: 10px !important; }
+      .daily-report-header h2 { font-size: 20px !important; }
+      .compact-metrics-bar { font-size: 13px !important; }
+      .desktop-table-view { display: block !important; }
+      .mobile-card-item { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Nav (Mobile Bottom Bar) -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-book-bookmark"></i>
+      <h2>Analiz Portalı</h2>
+    </div>
+
+    <nav class="nav-menu">
+      <a class="nav-item active" onclick="switchTab('notes')">
+        <i class="fa-solid fa-note-sticky"></i> <span>Notlarım</span>
+      </a>
+      <a class="nav-item" onclick="switchTab('calendar')">
+        <i class="fa-solid fa-calendar-days"></i> <span>Takvim</span>
+      </a>
+      <a class="nav-item" onclick="switchTab('analysis')">
+        <i class="fa-solid fa-magnifying-glass-chart"></i> <span>Analiz</span>
+      </a>
+      <a class="nav-item" onclick="switchTab('settings')">
+        <i class="fa-solid fa-gear"></i> <span>Ayarlar</span>
+      </a>
+    </nav>
+
+    <!-- HIZLI ANA EKRANA EKLE BUTONU (SOL ALT) -->
+    <div style="padding: 0 14px 8px 14px;" id="sidebarInstallWrapper" style="display: none;">
+      <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 11px; padding: 8px;" onclick="installAppPrompt()">
+        <i class="fa-solid fa-mobile-screen-button"></i> Uygulamayı Yükle
+      </button>
+    </div>
+
+    <div class="status-box">
+      <div>E-Tablo Durumu:</div>
+      <div class="status-indicator">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Bağlantı Yok</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main class="main-content">
+
+    <!-- PAGE: NOTES -->
+    <section id="notesSection" class="page-section active">
+      <div class="header-title">
+        <span>Notlarım</span>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="checkConnection()">
+            <i class="fa-solid fa-rotate"></i> E-Tablodan Eşitle
+          </button>
+          <button class="btn btn-primary" onclick="openNoteModal()">
+            <i class="fa-solid fa-plus"></i> Not Ekle
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="noteSearchInput" class="form-control" placeholder="Notlarda ara..." oninput="renderNotes()">
+      </div>
+
+      <div class="grid-cards" id="notesGrid"></div>
+    </section>
+
+    <!-- PAGE: CALENDAR & DAILY REPORT -->
+    <section id="calendarSection" class="page-section">
+      <div class="header-title">
+        <span>Takvim & Günlük Rapor</span>
+        <button class="btn btn-primary" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Günlük Raporu PDF / Yazdır
+        </button>
+      </div>
+
+      <div class="calendar-container">
+        <!-- Left: Interactive Calendar -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <h3 id="calMonthYear">Kasım 2026</h3>
+            <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="cal-day-name">Pt</div>
+            <div class="cal-day-name">Sa</div>
+            <div class="cal-day-name">Ça</div>
+            <div class="cal-day-name">Pe</div>
+            <div class="cal-day-name">Cu</div>
+            <div class="cal-day-name">Ct</div>
+            <div class="cal-day-name">Pz</div>
+          </div>
+          <div class="calendar-grid" id="calDaysGrid"></div>
+        </div>
+
+        <!-- Right: Printable Daily Report Paper -->
+        <div class="daily-report-paper">
+          <div class="daily-report-header">
+            <div class="report-brand-area">
+              <!-- U-S LOGO (Kırmızı Dolgulu, Alt Alta) -->
+              <div class="us-logo-badge">
+                <div>U</div>
+                <div>S</div>
+              </div>
+              <div>
+                <h2>GÜNLÜK VERİ & PERFORMANS RAPORU</h2>
+                <span id="dailyRptDateStr">Tarih: -</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-file-signature" style="font-size: 26px; color: #0f172a;"></i>
+          </div>
+
+          <!-- ZARİF TEK SATIR ÖZET ŞERİDİ -->
+          <div class="compact-metrics-bar">
+            <div>Kayıtlı Not: <span id="rptNoteCount">0</span></div>
+            <div>E-Tablo Satır: <span id="rptSheetRowCount">0</span></div>
+            <div>Durum: <span style="color: #10b981; background: #d1fae5;">AKTİF</span></div>
+          </div>
+
+          <!-- O Güne Ait Notlar -->
+          <div class="report-section-title">
+            <i class="fa-solid fa-sticky-note" style="color:#f59e0b;"></i> O GÜNE AİT NOTLAR
+          </div>
+          <div id="dayNotesContainer">
+            <i>Veri bulunamadı.</i>
+          </div>
+
+          <!-- O Güne Ait E-Tablo Kayıtları -->
+          <div class="report-section-title" style="margin-top:18px;">
+            <i class="fa-solid fa-table" style="color:#10b981;"></i> O GÜNE AİT E-TABLO KAYITLARI
+          </div>
+          <div id="dayTablesContainer">
+            <div style="color: #64748b; padding: 12px; text-align: center;">Veriler yükleniyor...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: ANALYSIS -->
+    <section id="analysisSection" class="page-section">
+      <div class="header-title">
+        <span>Akıllı E-Tablo Analizi</span>
+        <button class="btn btn-primary" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Analiz Raporunu PDF / Yazdır
+        </button>
+      </div>
+
+      <!-- Arama Form Alanı (Yazdırma Esnasında Gizlenir) -->
+      <div id="analysisSearchFormArea" class="card" style="margin-bottom: 20px;">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
+          <label>Arama Kriterleri:</label>
+          <input type="text" id="sheetQueryInput" class="form-control" placeholder="Örn: Kasa Önü Mağaza Vardiya M4" onkeyup="if(event.key==='Enter') runSmartDataAnalysis()">
+          <button class="btn btn-primary" onclick="runSmartDataAnalysis()" style="width: fit-content;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Analiz Et
+          </button>
+        </div>
+      </div>
+
+      <!-- PDF / Yazdırılabilir Rapor Kağıdı Formatı -->
+      <div class="daily-report-paper">
+        <div class="daily-report-header">
+          <div class="report-brand-area">
+            <div class="us-logo-badge">
+              <div>U</div>
+              <div>S</div>
+            </div>
+            <div>
+              <h2>E-TABLO ANALİZ VE SORGULAMA RAPORU</h2>
+              <span id="analysisReportInfo">Arama Bekleniyor...</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 26px; color: #0f172a;"></i>
+        </div>
+
+        <div class="compact-metrics-bar" id="analysisMetricsBar" style="display: none;">
+          <div>Eşleşen Kayıt: <span id="analysisMatchCountTag">0</span></div>
+          <div>Toplam Taranan: <span id="analysisTotalCountTag">0</span></div>
+          <div>Durum: <span style="color: #10b981; background: #d1fae5;">HAZIR</span></div>
+        </div>
+
+        <div class="report-section-title">
+          <i class="fa-solid fa-table" style="color:#10b981;"></i> ANALİZ SONUÇLARI
+        </div>
+        
+        <div id="analysisTablesContainer">
+          <div style="color: #64748b; padding: 16px; text-align: center;">
+            Arama yapmak için yukarıdaki arama kutusunu kullanınız.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: SETTINGS -->
+    <section id="settingsSection" class="page-section">
+      <div class="header-title">
+        <span>Apps Script Ayarları & Mobil Kurulum</span>
+      </div>
+
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="form-group">
+          <label>Apps Script Web App URL Adresi:</label>
+          <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+        <button class="btn btn-success" onclick="saveAndTestConnection()">
+          <i class="fa-solid fa-link"></i> Kaydet & Bağlan
+        </button>
+      </div>
+
+      <!-- UYGULAMA YÜKLEME KARTI -->
+      <div class="card" style="border-color: var(--accent-blue);">
+        <h3 style="font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-mobile-screen-button" style="color: var(--accent-blue);"></i> Telefonunuza Uygulama Olarak Yükleyin
+        </h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.4;">
+          Bu portalı telefonunuzun ana ekranına bir mobil uygulama simgesi olarak ekleyebilir, tarayıcı çubukları olmadan tam ekran hızında kullanabilirsiniz.
+        </p>
+        <button class="btn btn-primary" onclick="installAppPrompt()">
+          <i class="fa-solid fa-download"></i> Ana Ekrana Yükle / Ekle
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: ADD NOTE WITH DATE -->
+  <div class="modal-overlay" id="noteModal">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 14px; font-size: 16px;">Yeni Not Ekle</h3>
+      
+      <div class="form-group">
+        <label>Tarih Seçin:</label>
+        <input type="date" id="newNoteDateInput" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Not Başlığı:</label>
+        <input type="text" id="newNoteTitleInput" class="form-control" placeholder="Örn: Kasa Devir Teslimi">
+      </div>
+
+      <div class="form-group">
+        <label>Kategori / Etiket:</label>
+        <select id="newNoteTagInput" class="form-control">
+          <option value="Kişisel">Kişisel</option>
+          <option value="İş">İş</option>
+          <option value="Analiz">Analiz</option>
+          <option value="Vardiya">Vardiya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Not İçeriği:</label>
+        <textarea id="newNoteBodyInput" class="form-control" rows="3" placeholder="Not detaylarını yazınız..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+        <button class="btn btn-secondary" onclick="closeNoteModal()">İptal</button>
+        <button class="btn btn-success" onclick="saveNewNote()">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Kaydet & Gönder
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Management
+    let notes = JSON.parse(localStorage.getItem('user_notes') || '[]');
+    let scriptUrl = localStorage.getItem('gas_script_url') || 'https://script.google.com/macros/s/AKfycbz-NNEuFtIRHYr-k_QAdoRfTa_pUKirhyvH6jtyKTUEjz6KqqHKyiZKP6OaIYdmwKknWw/exec';
+    let rawSheetData = null;
+    let lastAnalysisResult = null;
+    let deferredPrompt = null;
+    
+    // Calendar State (Defaults to Today)
+    let currentCalDate = new Date();
+    
+    // Format Today as DD.MM.YYYY
+    const todayObj = new Date();
+    const todayStr = `${String(todayObj.getDate()).padStart(2, '0')}.${String(todayObj.getMonth() + 1).padStart(2, '0')}.${todayObj.getFullYear()}`;
+    let selectedDateStr = todayStr;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('scriptUrlInput').value = scriptUrl;
+      renderNotes();
+      renderCalendar();
+      if (scriptUrl) checkConnection();
+    });
+
+    // PWA Kurulum Dinleyicisi
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('sidebarInstallWrapper').style.display = 'block';
+    });
+
+    async function installAppPrompt() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('Kullanıcı uygulamayı yükledi.');
+        }
+        deferredPrompt = null;
+      } else {
+        // iPhone / Safari veya tarayıcı otomatik tetiklemesi yoksa kılavuz bilgi ver
+        alert("Uygulamayı ana ekrana eklemek için:\n\n• iPhone (Safari): Tarayıcının alttaki 'Paylaş' (Share) butonuna basın ve ardından 'Ana Ekrana Ekle' seçeneğini seçin.\n• Android (Chrome): Sağ üstteki üç nokta menüsüne basın ve 'Ana Ekrana Ekle' veya 'Uygulama Yükle' seçeneğini seçin.");
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId + 'Section').classList.add('active');
+    }
+
+    async function saveAndTestConnection() {
+      const url = document.getElementById('scriptUrlInput').value.trim();
+      if (!url) return alert('Lütfen geçerli bir URL girin.');
+
+      scriptUrl = url;
+      localStorage.setItem('gas_script_url', scriptUrl);
+      await checkConnection();
+    }
+
+    async function checkConnection() {
+      const dot = document.getElementById('statusDot');
+      const text = document.getElementById('statusText');
+      
+      text.innerText = "Bağlanıyor...";
+      dot.className = "dot";
+
+      try {
+        const res = await fetch(scriptUrl);
+        const json = await res.json();
+        
+        if (json.status === 'success' || json.data) {
+          rawSheetData = json.data;
+          dot.className = "dot connected";
+          text.innerText = "Bağlandı (" + rawSheetData.length + " Sayfa)";
+
+          syncNotesFromSheet();
+          loadDateReport(selectedDateStr);
+        } else {
+          throw new Error('Veri formatı uyuşmuyor');
+        }
+      } catch (err) {
+        dot.className = "dot";
+        text.innerText = "Bağlantı Hatası";
+        console.error(err);
+      }
+    }
+
+    function syncNotesFromSheet() {
+      if (!rawSheetData) return;
+      
+      const notlarimSheet = rawSheetData.find(s => s.sheetName.toLowerCase() === "notlarim");
+      if (!notlarimSheet || !notlarimSheet.rows || notlarimSheet.rows.length < 2) return;
+
+      const rows = notlarimSheet.rows;
+      let addedCount = 0;
+
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        const rowDate = row[0] ? String(row[0]).trim() : todayStr;
+        const rowTitle = row[1] ? String(row[1]).trim() : '';
+        const rowBody = row[2] ? String(row[2]).trim() : '';
+        const rowTag = row[3] ? String(row[3]).trim() : 'E-Tablo';
+
+        if (rowTitle || rowBody) {
+          const exists = notes.some(n => n.title.toLowerCase() === rowTitle.toLowerCase() && n.date === rowDate);
+
+          if (!exists) {
+            notes.unshift({
+              date: rowDate,
+              title: rowTitle || 'Başlıksız Not',
+              body: rowBody,
+              tag: rowTag
+            });
+            addedCount++;
+          }
+        }
+      }
+
+      if (addedCount > 0) {
+        localStorage.setItem('user_notes', JSON.stringify(notes));
+        renderNotes();
+        renderCalendar();
+        loadDateReport(selectedDateStr);
+      }
+    }
+
+    function openNoteModal() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('newNoteDateInput').value = today;
+      document.getElementById('newNoteTitleInput').value = '';
+      document.getElementById('newNoteBodyInput').value = '';
+      document.getElementById('noteModal').style.display = 'flex';
+    }
+
+    function closeNoteModal() {
+      document.getElementById('noteModal').style.display = 'none';
+    }
+
+    async function saveNewNote() {
+      const rawDate = document.getElementById('newNoteDateInput').value;
+      const title = document.getElementById('newNoteTitleInput').value.trim();
+      const tag = document.getElementById('newNoteTagInput').value;
+      const body = document.getElementById('newNoteBodyInput').value.trim();
+
+      if (!title || !body) return alert("Lütfen başlık ve içeriği doldurun.");
+
+      let formattedDate = todayStr;
+      if (rawDate) {
+        const parts = rawDate.split('-');
+        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+      }
+
+      const newNoteObj = { title, body, tag, date: formattedDate };
+
+      notes.unshift(newNoteObj);
+      localStorage.setItem('user_notes', JSON.stringify(notes));
+
+      if (scriptUrl) {
+        try {
+          fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newNoteObj)
+          });
+        } catch (e) { console.error("Sync error:", e); }
+      }
+
+      closeNoteModal();
+      renderNotes();
+      renderCalendar();
+      loadDateReport(selectedDateStr);
+    }
+
+    function renderNotes() {
+      const grid = document.getElementById('notesGrid');
+      const filter = document.getElementById('noteSearchInput')?.value.toLowerCase() || '';
+      const filtered = notes.filter(n => n.title.toLowerCase().includes(filter) || n.body.toLowerCase().includes(filter));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="color: var(--text-muted);">Henüz kaydedilmiş not bulunmuyor.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((n, i) => `
+        <div class="card note-card">
+          <div>
+            <div class="note-header">
+              <span class="note-tag">${n.tag || 'Genel'}</span>
+              <i class="fa-solid fa-trash" style="cursor:pointer; color:var(--accent-rose);" onclick="deleteNote(${i})"></i>
+            </div>
+            <div class="note-title">${n.title}</div>
+            <div class="note-body">${n.body}</div>
+          </div>
+          <div class="note-footer">
+            <span><i class="fa-solid fa-calendar"></i> ${n.date}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function deleteNote(index) {
+      if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
+        notes.splice(index, 1);
+        localStorage.setItem('user_notes', JSON.stringify(notes));
+        renderNotes();
+        renderCalendar();
+        loadDateReport(selectedDateStr);
+      }
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calDaysGrid');
+      const monthYearTitle = document.getElementById('calMonthYear');
+
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+
+      const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+      monthYearTitle.innerText = `${monthNames[month]} ${year}`;
+
+      grid.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const startingDay = firstDay === 0 ? 6 : firstDay - 1;
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < startingDay; i++) {
+        grid.appendChild(document.createElement('div'));
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'cal-day';
+        dayEl.innerText = day;
+
+        const formattedDate = `${String(day).padStart(2, '0')}.${String(month + 1).padStart(2, '0')}.${year}`;
+
+        if (formattedDate === todayStr) {
+          dayEl.classList.add('today');
+        }
+
+        if (selectedDateStr === formattedDate) {
+          dayEl.classList.add('selected');
+        }
+
+        dayEl.onclick = () => {
+          document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+          dayEl.classList.add('selected');
+          selectedDateStr = formattedDate;
+          loadDateReport(formattedDate);
+        };
+
+        grid.appendChild(dayEl);
+      }
+    }
+
+    function changeMonth(delta) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    function renderSheetsToContainer(sheetsArray, containerId, totalCountId) {
+      const container = document.getElementById(containerId);
+
+      if (!rawSheetData) {
+        container.innerHTML = `<div style="color:#64748b; text-align:center; padding:12px;">E-Tablo verisi bekleniyor...</div>`;
+        document.getElementById(totalCountId).innerText = "0";
+        return;
+      }
+
+      let totalMatchedRowsCount = 0;
+      sheetsArray.forEach(s => totalMatchedRowsCount += s.rows.length);
+      document.getElementById(totalCountId).innerText = totalMatchedRowsCount;
+
+      if (sheetsArray.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#64748b; padding:16px; font-size:13px;">Kayıt bulunamadı.</div>`;
+        return;
+      }
+
+      container.innerHTML = sheetsArray.map(s => `
+        <div class="sub-sheet-container">
+          <div class="sub-sheet-title">
+            <i class="fa-solid fa-file-excel"></i> ${s.sheetName} (${s.rows.length} Kayıt)
+          </div>
+          
+          <div class="table-wrapper desktop-table-view">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  ${s.headers.map(h => `<th>${h}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${s.rows.map(row => `
+                  <tr>
+                    ${row.map(cell => `<td>${cell !== null && cell !== undefined ? cell : ''}</td>`).join('')}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div style="padding: 8px;">
+            ${s.rows.map(row => `
+              <div class="mobile-card-item">
+                ${s.headers.map((h, idx) => `
+                  <div class="mobile-card-row">
+                    <span class="mobile-card-label">${h}:</span>
+                    <span class="mobile-card-val">${row[idx] !== null && row[idx] !== undefined ? row[idx] : ''}</span>
+                  </div>
+                `).join('')}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadDateReport(dateStr) {
+      const isToday = dateStr === todayStr;
+      document.getElementById('dailyRptDateStr').innerText = `Rapor Tarihi: ${dateStr} ${isToday ? '(BUGÜN)' : ''}`;
+
+      const dayNotes = notes.filter(n => n.date === dateStr);
+      const notesContainer = document.getElementById('dayNotesContainer');
+      document.getElementById('rptNoteCount').innerText = dayNotes.length;
+
+      if (dayNotes.length === 0) {
+        notesContainer.innerHTML = `<i style="color:#64748b; font-size:13px;">Bu tarihe ait kaydedilmiş not bulunmamaktadır.</i>`;
+      } else {
+        notesContainer.innerHTML = dayNotes.map(n => `
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin-bottom:8px; color:#1e293b; border-left: 4px solid #3b82f6;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <b style="font-size:14px;">${n.title}</b> 
+              <span style="font-size:11px; background:#3b82f6; color:white; padding:2px 8px; border-radius:10px; font-weight:700;">${n.tag}</span>
+            </div>
+            <div style="margin-top:6px; color:#334155; font-size:13.5px; line-height:1.5;">${n.body}</div>
+          </div>
+        `).join('');
+      }
+
+      if (!rawSheetData) return;
+
+      let sheetsWithMatchedRows = [];
+      const parts = dateStr.split('.'); 
+      const day = parts[0];
+      const month = parts[1];
+      const year = parts[2];
+      
+      const isoDate = `${year}-${month}-${day}`;       
+      const shortDate = `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`; 
+
+      rawSheetData.forEach(sheet => {
+        if (sheet.sheetName.toLowerCase() === "notlarim") return; 
+        if (!sheet.rows || sheet.rows.length < 2) return;
+
+        const headers = sheet.rows[0];
+        let sheetMatchedRows = [];
+
+        for (let i = 1; i < sheet.rows.length; i++) {
+          const row = sheet.rows[i];
+          let isExactDateMatch = false;
+
+          for (let j = 0; j < row.length; j++) {
+            const cellVal = String(row[j] || "").trim();
+            if (
+              cellVal === dateStr || 
+              cellVal === shortDate || 
+              cellVal === isoDate ||
+              cellVal.includes(dateStr) || 
+              cellVal.includes(isoDate)
+            ) {
+              if (!cellVal.includes("sayfa") && cellVal.length < 25) {
+                isExactDateMatch = true;
+                break;
+              }
+            }
+          }
+
+          if (isExactDateMatch) {
+            sheetMatchedRows.push(row);
+          }
+        }
+
+        if (sheetMatchedRows.length > 0) {
+          sheetsWithMatchedRows.push({
+            sheetName: sheet.sheetName,
+            headers: headers,
+            rows: sheetMatchedRows
+          });
+        }
+      });
+
+      renderSheetsToContainer(sheetsWithMatchedRows, 'dayTablesContainer', 'rptSheetRowCount');
+    }
+
+    function runSmartDataAnalysis() {
+      const inputQuery = document.getElementById('sheetQueryInput').value.trim();
+      if (!rawSheetData) return alert("E-Tablo verisi yüklenemedi.");
+      if (!inputQuery) return alert("Lütfen aramak istediğiniz kelimeyi girin.");
+
+      document.getElementById('analysisReportInfo').innerText = `Sorgu: "${inputQuery}"`;
+
+      const queryTokens = inputQuery.toLowerCase().split(/[\s,]+/).filter(t => t.length > 0);
+      let targetSheetName = null;
+
+      rawSheetData.forEach(sheet => {
+        const sheetNameLower = sheet.sheetName.toLowerCase();
+        queryTokens.forEach(token => {
+          if (sheetNameLower.includes(token)) targetSheetName = sheet.sheetName;
+        });
+      });
+
+      const sheetsToScan = targetSheetName ? rawSheetData.filter(s => s.sheetName === targetSheetName) : rawSheetData;
+
+      let sheetsWithMatchedRows = [];
+      let totalRowsCount = 0;
+
+      sheetsToScan.forEach(sheet => {
+        const rows = sheet.rows;
+        if (!rows || rows.length < 2) return;
+        const headers = rows[0];
+        let sheetMatchedRows = [];
+
+        for (let i = 1; i < rows.length; i++) {
+          totalRowsCount++;
+          const row = rows[i];
+          const rowString = row.join(" ").toLowerCase();
+
+          const matchesSearchValues = queryTokens.every(val => rowString.includes(val));
+
+          if (matchesSearchValues) {
+            sheetMatchedRows.push(row);
+          }
+        }
+
+        if (sheetMatchedRows.length > 0) {
+          sheetsWithMatchedRows.push({
+            sheetName: sheet.sheetName,
+            headers: headers,
+            rows: sheetMatchedRows
+          });
+        }
+      });
+
+      document.getElementById('analysisMetricsBar').style.display = 'flex';
+      document.getElementById('analysisTotalCountTag').innerText = totalRowsCount;
+
+      renderSheetsToContainer(sheetsWithMatchedRows, 'analysisTablesContainer', 'analysisMatchCountTag');
+    }
+  </script>
+</body>
+</html>
