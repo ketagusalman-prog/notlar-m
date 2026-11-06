@@ -3,20 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Not Defteri & E-Tablo Takvimli Mobil Portal</title>
+  <title>Not Defteri & Güvenli Asistan Portal</title>
   
-  <!-- PWA & Mobil Uygulama Tanımlamaları -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0f172a">
   
-  <!-- Font & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -52,7 +49,116 @@
       padding-bottom: 70px;
     }
 
-    /* Desktop Sidebar Nav */
+    /* 🔒 ŞIK GİRİŞ EKRANI (LOCK SCREEN OVERLAY) */
+    #lockScreenOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #0b1120 0%, #0f172a 50%, #1e1b4b 100%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lock-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .lock-logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border-radius: 16px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .lock-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .lock-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .lock-input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .lock-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .lock-input:focus {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+    }
+
+    .lock-input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .lock-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      transition: all 0.2s;
+    }
+
+    .lock-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .lock-error {
+      color: var(--accent-rose);
+      font-size: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ANA PORTAL YAPISI */
     .sidebar {
       width: var(--sidebar-width);
       background-color: #0b1120;
@@ -119,7 +225,6 @@
     .dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-rose); }
     .dot.connected { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
 
-    /* Main Container */
     .main-content {
       margin-left: var(--sidebar-width);
       flex-grow: 1;
@@ -141,7 +246,6 @@
       gap: 12px;
     }
 
-    /* Buttons & Inputs */
     .btn {
       padding: 10px 16px;
       border-radius: 8px;
@@ -159,6 +263,7 @@
     .btn-success { background-color: var(--accent-green); color: white; }
     .btn-purple { background-color: var(--accent-purple); color: white; }
     .btn-secondary { background-color: var(--card-dark); color: var(--text-main); border: 1px solid var(--card-border); }
+    .btn-danger { background-color: var(--accent-rose); color: white; }
 
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
@@ -173,7 +278,61 @@
       outline: none;
     }
 
-    /* Modal Overlay */
+    .ai-assistant-container {
+      background: var(--card-dark);
+      border: 1px solid var(--accent-purple);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+    }
+
+    .ai-chat-box {
+      background: rgba(11, 17, 32, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 120px;
+      max-height: 350px;
+      overflow-y: auto;
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .pinpoint-result-card {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid var(--accent-purple);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .pinpoint-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--accent-purple);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .pinpoint-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      font-size: 13px;
+    }
+    .pinpoint-item {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .pinpoint-label { font-size: 11px; color: var(--text-muted); font-weight: 600; display: block; }
+    .pinpoint-val { font-size: 13.5px; color: var(--text-main); font-weight: 700; }
+
     .modal-overlay {
       display: none;
       position: fixed;
@@ -194,7 +353,6 @@
       max-width: 440px;
     }
 
-    /* Cards & Notes Grid */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -219,7 +377,6 @@
     .note-body { font-size: 13px; color: var(--text-muted); white-space: pre-wrap; line-height: 1.4; }
     .note-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--card-border); font-size: 11px; color: var(--text-muted); }
 
-    /* Calendar Grid Layout */
     .calendar-container {
       display: grid;
       grid-template-columns: 300px 1fr;
@@ -247,7 +404,6 @@
     .cal-day.today { border: 2px solid var(--accent-green) !important; font-weight: 800; color: var(--accent-green); }
     .cal-day.selected.today { color: white; }
 
-    /* PROFESYONEL RAPOR / ANALİZ SAYFASI BÖLÜMÜ */
     .daily-report-paper {
       background-color: #ffffff;
       color: #0f172a;
@@ -273,7 +429,6 @@
       gap: 14px;
     }
 
-    /* U-S KURUMSAL LOGO (Kırmızı Dolgulu, Alt Alta, Tire Yok) */
     .us-logo-badge {
       width: 46px;
       height: 46px;
@@ -307,7 +462,6 @@
       margin-top: 2px;
     }
 
-    /* ZARİF TEK SATIR ÖZET ŞERİDİ */
     .compact-metrics-bar {
       display: flex;
       align-items: center;
@@ -345,7 +499,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Tablo Grupları & Sayfa Bazlı Tablolar */
     .sub-sheet-container {
       margin-bottom: 20px;
       border: 1px solid #cbd5e1;
@@ -372,7 +525,6 @@
     .report-table td { border: 1px solid #cbd5e1; padding: 8px 10px; color: #1e293b; font-weight: 500; font-size: 13px; }
     .report-table tbody tr:nth-child(even) { background-color: #f8fafc; }
 
-    /* MOBİL İÇİN AKILLI KART DÖNÜŞÜMÜ */
     .mobile-card-item { display: none; }
 
     @media (max-width: 768px) {
@@ -442,7 +594,6 @@
       .mobile-card-val { font-weight: 600; color: #0f172a; width: 50%; text-align: right; word-break: break-word; }
     }
 
-    /* PRINT QUERY ENHANCEMENTS */
     @media print {
       body { background-color: #ffffff !important; color: #0f172a !important; padding-bottom: 0 !important; font-size: 15px !important; }
       .sidebar, .btn, .no-print, .modal-overlay, .calendar-card, .header-title, #analysisSearchFormArea { display: none !important; }
@@ -464,7 +615,31 @@
 </head>
 <body>
 
-  <!-- Sidebar Nav (Mobile Bottom Bar) -->
+  <!-- 🔒 DIŞARIDAKI ŞIK ŞİFRE GİRİŞ EKRANI -->
+  <div id="lockScreenOverlay">
+    <div class="lock-card">
+      <div class="lock-logo">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div class="lock-title">Yetkili Girişi</div>
+      <div class="lock-subtitle">Umut Salman Asistan Portalına Hoş Geldiniz</div>
+      
+      <div class="lock-input-group">
+        <i class="fa-solid fa-key lock-input-icon"></i>
+        <input type="password" id="portalPasswordInput" class="lock-input" placeholder="Şifrenizi girin..." onkeyup="if(event.key==='Enter') checkPortalPassword()">
+      </div>
+
+      <button class="lock-btn" onclick="checkPortalPassword()">
+        <i class="fa-solid fa-lock-open"></i> Giriş Yap
+      </button>
+
+      <div class="lock-error" id="lockErrorMsg">
+        <i class="fa-solid fa-triangle-exclamation"></i> Hatalı şifre! Lütfen tekrar deneyin.
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Nav -->
   <aside class="sidebar">
     <div class="brand">
       <i class="fa-solid fa-book-bookmark"></i>
@@ -473,7 +648,7 @@
 
     <nav class="nav-menu">
       <a class="nav-item active" onclick="switchTab('notes')">
-        <i class="fa-solid fa-note-sticky"></i> <span>Notlarım</span>
+        <i class="fa-solid fa-robot"></i> <span>Yapay Zeka Asistan</span>
       </a>
       <a class="nav-item" onclick="switchTab('calendar')">
         <i class="fa-solid fa-calendar-days"></i> <span>Takvim</span>
@@ -486,8 +661,7 @@
       </a>
     </nav>
 
-    <!-- HIZLI ANA EKRANA EKLE BUTONU (SOL ALT) -->
-    <div style="padding: 0 14px 8px 14px;" id="sidebarInstallWrapper" style="display: none;">
+    <div style="padding: 0 14px 8px 14px;" id="sidebarInstallWrapper">
       <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 11px; padding: 8px;" onclick="installAppPrompt()">
         <i class="fa-solid fa-mobile-screen-button"></i> Uygulamayı Yükle
       </button>
@@ -505,10 +679,10 @@
   <!-- Main View -->
   <main class="main-content">
 
-    <!-- PAGE: NOTES -->
+    <!-- PAGE: NOTES & AI ASSISTANT -->
     <section id="notesSection" class="page-section active">
       <div class="header-title">
-        <span>Notlarım</span>
+        <span>Yapay Zeka Asistanı</span>
         <div style="display: flex; gap: 8px;">
           <button class="btn btn-secondary" onclick="checkConnection()">
             <i class="fa-solid fa-rotate"></i> E-Tablodan Eşitle
@@ -519,8 +693,36 @@
         </div>
       </div>
 
+      <!-- KUSURSUZ NİYET AYRIŞTIRMALI YAPAY ZEKA ASİSTAN PANELİ -->
+      <div class="ai-assistant-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <b style="font-size: 15px; display: flex; align-items: center; gap: 8px; color: var(--accent-purple);">
+            <i class="fa-solid fa-brain"></i> Akıllı Niyet ve Kapsam Ayrıştırma Asistanı
+          </b>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="toggleAiVoiceInput()" id="aiVoiceBtn">
+              <i class="fa-solid fa-microphone"></i> Sesle Sor
+            </button>
+            <button class="btn btn-purple" style="padding: 6px 12px; font-size: 12px;" onclick="speakLastAiAnswer()">
+              <i class="fa-solid fa-volume-high"></i> Sesli Dinle
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-group" style="margin-top: 12px; margin-bottom: 0; display: flex; gap: 8px;">
+          <input type="text" id="aiQueryInput" class="form-control" placeholder="Örn: 'Ahmet Kandiş notları göster' veya 'Ahmet Kandiş kartezyen'" onkeyup="if(event.key==='Enter') runAiMasterQuery()">
+          <button class="btn btn-purple" onclick="runAiMasterQuery()" style="background-color: var(--accent-purple);">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Analiz Et
+          </button>
+        </div>
+
+        <div class="ai-chat-box" id="aiChatOutput">
+          Umut Bey, portalımız şifre korumasıyla güvence altına alındı. <b>"Ahmet Kandiş notları göster"</b> veya <b>"Ahmet Kandiş kartezyen"</b> sorgularını anında nokta atışı yapabilirsiniz.
+        </div>
+      </div>
+
       <div class="form-group">
-        <input type="text" id="noteSearchInput" class="form-control" placeholder="Notlarda ara..." oninput="renderNotes()">
+        <input type="text" id="noteSearchInput" class="form-control" placeholder="Notlarda kelime ara..." oninput="renderNotes()">
       </div>
 
       <div class="grid-cards" id="notesGrid"></div>
@@ -536,7 +738,6 @@
       </div>
 
       <div class="calendar-container">
-        <!-- Left: Interactive Calendar -->
         <div class="calendar-card">
           <div class="calendar-header">
             <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
@@ -556,11 +757,9 @@
           <div class="calendar-grid" id="calDaysGrid"></div>
         </div>
 
-        <!-- Right: Printable Daily Report Paper -->
         <div class="daily-report-paper">
           <div class="daily-report-header">
             <div class="report-brand-area">
-              <!-- U-S LOGO (Kırmızı Dolgulu, Alt Alta) -->
               <div class="us-logo-badge">
                 <div>U</div>
                 <div>S</div>
@@ -573,14 +772,12 @@
             <i class="fa-solid fa-file-signature" style="font-size: 26px; color: #0f172a;"></i>
           </div>
 
-          <!-- ZARİF TEK SATIR ÖZET ŞERİDİ -->
           <div class="compact-metrics-bar">
             <div>Kayıtlı Not: <span id="rptNoteCount">0</span></div>
             <div>E-Tablo Satır: <span id="rptSheetRowCount">0</span></div>
             <div>Durum: <span style="color: #10b981; background: #d1fae5;">AKTİF</span></div>
           </div>
 
-          <!-- O Güne Ait Notlar -->
           <div class="report-section-title">
             <i class="fa-solid fa-sticky-note" style="color:#f59e0b;"></i> O GÜNE AİT NOTLAR
           </div>
@@ -588,7 +785,6 @@
             <i>Veri bulunamadı.</i>
           </div>
 
-          <!-- O Güne Ait E-Tablo Kayıtları -->
           <div class="report-section-title" style="margin-top:18px;">
             <i class="fa-solid fa-table" style="color:#10b981;"></i> O GÜNE AİT E-TABLO KAYITLARI
           </div>
@@ -608,7 +804,6 @@
         </button>
       </div>
 
-      <!-- Arama Form Alanı (Yazdırma Esnasında Gizlenir) -->
       <div id="analysisSearchFormArea" class="card" style="margin-bottom: 20px;">
         <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
           <label>Arama Kriterleri:</label>
@@ -619,7 +814,6 @@
         </div>
       </div>
 
-      <!-- PDF / Yazdırılabilir Rapor Kağıdı Formatı -->
       <div class="daily-report-paper">
         <div class="daily-report-header">
           <div class="report-brand-area">
@@ -669,7 +863,6 @@
         </button>
       </div>
 
-      <!-- UYGULAMA YÜKLEME KARTI -->
       <div class="card" style="border-color: var(--accent-blue);">
         <h3 style="font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-mobile-screen-button" style="color: var(--accent-blue);"></i> Telefonunuza Uygulama Olarak Yükleyin
@@ -685,7 +878,7 @@
 
   </main>
 
-  <!-- MODAL: ADD NOTE WITH DATE -->
+  <!-- MODAL: ADD NOTE WITH VOICE RECOGNITION -->
   <div class="modal-overlay" id="noteModal">
     <div class="modal-card">
       <h3 style="margin-bottom: 14px; font-size: 16px;">Yeni Not Ekle</h3>
@@ -711,8 +904,13 @@
       </div>
 
       <div class="form-group">
-        <label>Not İçeriği:</label>
-        <textarea id="newNoteBodyInput" class="form-control" rows="3" placeholder="Not detaylarını yazınız..."></textarea>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <label style="margin-bottom: 0;">Not İçeriği:</label>
+          <button type="button" id="voiceBtn" class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;" onclick="toggleSpeechRecognition()">
+            <i class="fa-solid fa-microphone"></i> Sesle Yaz
+          </button>
+        </div>
+        <textarea id="newNoteBodyInput" class="form-control" rows="4" placeholder="Not detaylarını yazınız veya yukarıdan sesle dikte edin..."></textarea>
       </div>
 
       <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
@@ -725,33 +923,44 @@
   </div>
 
   <script>
-    // State Management
     let notes = JSON.parse(localStorage.getItem('user_notes') || '[]');
     let scriptUrl = localStorage.getItem('gas_script_url') || 'https://script.google.com/macros/s/AKfycbz-NNEuFtIRHYr-k_QAdoRfTa_pUKirhyvH6jtyKTUEjz6KqqHKyiZKP6OaIYdmwKknWw/exec';
     let rawSheetData = null;
-    let lastAnalysisResult = null;
     let deferredPrompt = null;
+    let lastAiResponseText = "";
     
-    // Calendar State (Defaults to Today)
     let currentCalDate = new Date();
     
-    // Format Today as DD.MM.YYYY
     const todayObj = new Date();
     const todayStr = `${String(todayObj.getDate()).padStart(2, '0')}.${String(todayObj.getMonth() + 1).padStart(2, '0')}.${todayObj.getFullYear()}`;
     let selectedDateStr = todayStr;
 
+    // 🔒 ŞİFRE KONTROL FONKSİYONU (Varsayılan şifre: 68545051Us.)
+    function checkPortalPassword() {
+      const passInput = document.getElementById('portalPasswordInput').value.trim();
+      const errorMsg = document.getElementById('lockErrorMsg');
+      const correctPass = "68545051Us.";
+
+      if (passInput === correctPass) {
+        document.getElementById('lockScreenOverlay').style.display = 'none';
+        renderNotes();
+        renderCalendar();
+        if (scriptUrl) checkConnection();
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('portalPasswordInput').value = '';
+        document.getElementById('portalPasswordInput').focus();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('scriptUrlInput').value = scriptUrl;
-      renderNotes();
-      renderCalendar();
-      if (scriptUrl) checkConnection();
+      document.getElementById('portalPasswordInput').focus();
     });
 
-    // PWA Kurulum Dinleyicisi
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      document.getElementById('sidebarInstallWrapper').style.display = 'block';
     });
 
     async function installAppPrompt() {
@@ -763,8 +972,261 @@
         }
         deferredPrompt = null;
       } else {
-        // iPhone / Safari veya tarayıcı otomatik tetiklemesi yoksa kılavuz bilgi ver
         alert("Uygulamayı ana ekrana eklemek için:\n\n• iPhone (Safari): Tarayıcının alttaki 'Paylaş' (Share) butonuna basın ve ardından 'Ana Ekrana Ekle' seçeneğini seçin.\n• Android (Chrome): Sağ üstteki üç nokta menüsüne basın ve 'Ana Ekrana Ekle' veya 'Uygulama Yükle' seçeneğini seçin.");
+      }
+    }
+
+    // 🧠 KUSURSUZ NİYET AYRIŞTIRMALI YAPAY ZEKA MASTER MOTORU
+    function runAiMasterQuery(overrideText) {
+      const rawQuery = overrideText || document.getElementById('aiQueryInput').value.trim();
+      const chatBox = document.getElementById('aiChatOutput');
+
+      if (!rawQuery) {
+        chatBox.innerHTML = "<b>⚠️ Lütfen asistanınıza ne aratmak istediğinizi cümle olarak yazın.</b>";
+        return;
+      }
+
+      const qLower = rawQuery.toLowerCase();
+
+      // 1. Kapsam Kilidi: Notlar mı isteniyor?
+      const isAskingForNotes = qLower.includes("not") || qLower.includes("notlar");
+
+      if (isAskingForNotes) {
+        let matchedNotes = notes.filter(n => {
+          const nText = (n.title + " " + n.body + " " + n.tag + " " + n.date).toLowerCase();
+          const words = qLower.split(/\s+/).filter(w => w.length > 2 && w !== "not" && w !== "notları" && w !== "göster" && w !== "ver");
+          if (words.length === 0) return true;
+          return words.some(w => nText.includes(w));
+        });
+
+        if (matchedNotes.length === 0) {
+          lastAiResponseText = `Aradığınız kritere uygun kayıtlı herhangi bir not bulunamadı, Umut Bey.`;
+          chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${lastAiResponseText}`;
+          return;
+        }
+
+        let html = `<b>🤖 AI Asistan Eşleşen Notlar:</b><br><br>`;
+        let speech = `Bulunan notlar: `;
+
+        matchedNotes.forEach((n) => {
+          html += `
+            <div class="pinpoint-result-card">
+              <div class="pinpoint-header"><span><i class="fa-solid fa-sticky-note"></i> ${n.title} (${n.date}) - [${n.tag}]</span></div>
+              <div style="font-size:13.5px; color:var(--text-main); margin-top:4px;">${n.body}</div>
+            </div>
+          `;
+          speech += `Başlık ${n.title}. İçerik ${n.body}. `;
+        });
+
+        lastAiResponseText = speech;
+        chatBox.innerHTML = html;
+        return;
+      }
+
+      // 2. E-Tablo Veri Sorgulama Modülü
+      if (!rawSheetData) {
+        chatBox.innerHTML = "<b>⚠️ E-Tablo verileri henüz yüklenmedi. Lütfen sol alttan eşitleyin.</b>";
+        return;
+      }
+
+      const stopWords = ["nedir", "kaç", "göster", "bana", "için", "olan", "nasıl", "ne", "ile", "ve", "de", "da", "bir", "bu", "şu", "olarak", "ver", "getir", "sonucu", "sonuçları"];
+      const cleanText = qLower.replace(/[.,\/\/#!$%\^&\*;:{}=\-_`~()?"'üĞŞİÖÇüğşioç]/g, " ");
+      const queryTokens = cleanText.split(/\s+/).filter(t => t.length > 1 && !stopWords.includes(t));
+
+      if (queryTokens.length === 0) {
+        chatBox.innerHTML = "<b>⚠️ Lütfen daha net bir arama terimi belirtin.</b>";
+        return;
+      }
+
+      let bestMatches = [];
+
+      rawSheetData.forEach(sheet => {
+        const sheetNameLower = sheet.sheetName.toLowerCase();
+        const isTargetSheet = queryTokens.some(token => sheetNameLower.includes(token));
+
+        if (sheet.rows && sheet.rows.length > 1) {
+          const headers = sheet.rows[0];
+          for (let i = 1; i < sheet.rows.length; i++) {
+            const row = sheet.rows[i];
+            const rowString = row.join(" ").toLowerCase();
+
+            let matchScore = 0;
+            queryTokens.forEach(token => {
+              if (rowString.includes(token)) {
+                matchScore += 1;
+                row.forEach(cell => {
+                  if (cell && String(cell).toLowerCase().includes(token)) matchScore += 1.5;
+                });
+              }
+            });
+
+            if (matchScore > 0) {
+              bestMatches.push({
+                sheetName: sheet.sheetName,
+                headers: headers,
+                row: row,
+                score: matchScore + (isTargetSheet ? 5 : 0)
+              });
+            }
+          }
+        }
+      });
+
+      bestMatches.sort((a, b) => b.score - a.score);
+
+      if (bestMatches.length === 0) {
+        lastAiResponseText = `"${rawQuery}" talebinizle eşleşen bir e-tablo kaydı bulunamadı.`;
+        chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${lastAiResponseText}`;
+        return;
+      }
+
+      let htmlOutput = `<b>🤖 AI Asistan Nokta Atışı Sentezi ("${rawQuery}"):</b><br><br>`;
+      let speechSummary = `Sorgunuz için bulduğum en net sonuç: `;
+
+      bestMatches.slice(0, 1).forEach((match) => {
+        htmlOutput += `
+          <div class="pinpoint-result-card">
+            <div class="pinpoint-header">
+              <span><i class="fa-solid fa-file-excel"></i> ${match.sheetName} (Nokta Atışı Eşleşme)</span>
+            </div>
+            <div class="pinpoint-grid">
+        `;
+        match.headers.forEach((h, idx) => {
+          const val = match.row[idx];
+          if (val !== undefined && val !== null && String(val).trim() !== "") {
+            htmlOutput += `
+              <div class="pinpoint-item">
+                <span class="pinpoint-label">${h}</span>
+                <span class="pinpoint-val">${val}</span>
+              </div>
+            `;
+            speechSummary += `${h} ${val}. `;
+          }
+        });
+        htmlOutput += `</div></div>`;
+      });
+
+      lastAiResponseText = speechSummary;
+      chatBox.innerHTML = htmlOutput;
+    }
+
+    // Sesli Okuma
+    function speakLastAiAnswer() {
+      if (!lastAiResponseText) {
+        alert("Okunacak bir asistan yanıtı bulunmuyor.");
+        return;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(lastAiResponseText);
+        utterance.lang = 'tr-TR';
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Tarayıcınız sesli okuma özelliğini desteklemiyor.");
+      }
+    }
+
+    // Sesli Komut
+    let aiRecognition = null;
+    let isAiListening = false;
+
+    function toggleAiVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Tarayıcınız sesli komut özelliğini desteklemiyor.");
+        return;
+      }
+
+      const aiVoiceBtn = document.getElementById('aiVoiceBtn');
+      const aiInput = document.getElementById('aiQueryInput');
+
+      if (!isAiListening) {
+        aiRecognition = new SpeechRecognition();
+        aiRecognition.lang = 'tr-TR';
+        aiRecognition.continuous = false;
+        aiRecognition.interimResults = false;
+
+        aiRecognition.onstart = () => {
+          isAiListening = true;
+          aiVoiceBtn.className = "btn btn-danger";
+          aiVoiceBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...';
+        };
+
+        aiRecognition.onresult = (event) => {
+          const spokenText = event.results[0][0].transcript;
+          aiInput.value = spokenText;
+          runAiMasterQuery(spokenText);
+        };
+
+        aiRecognition.onerror = () => { stopAiVoice(); };
+        aiRecognition.onend = () => { stopAiVoice(); };
+
+        aiRecognition.start();
+      } else {
+        if (aiRecognition) aiRecognition.stop();
+        stopAiVoice();
+      }
+    }
+
+    function stopAiVoice() {
+      isAiListening = false;
+      const aiVoiceBtn = document.getElementById('aiVoiceBtn');
+      if (aiVoiceBtn) {
+        aiVoiceBtn.className = "btn btn-secondary";
+        aiVoiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Sor';
+      }
+    }
+
+    // Notlar için Sesli Dikte
+    let noteRecognition = null;
+    let isNoteListening = false;
+
+    function toggleSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Tarayıcınız sesli dikte özelliğini desteklemiyor.");
+        return;
+      }
+
+      const voiceBtn = document.getElementById('voiceBtn');
+      const bodyInput = document.getElementById('newNoteBodyInput');
+
+      if (!isNoteListening) {
+        noteRecognition = new SpeechRecognition();
+        noteRecognition.lang = 'tr-TR';
+        noteRecognition.continuous = true;
+        noteRecognition.interimResults = true;
+
+        noteRecognition.onstart = () => {
+          isNoteListening = true;
+          voiceBtn.className = "btn btn-danger";
+          voiceBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...';
+        };
+
+        noteRecognition.onresult = (event) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+          }
+          bodyInput.value = transcript;
+        };
+
+        noteRecognition.onerror = () => { stopNoteVoice(); };
+        noteRecognition.onend = () => { stopNoteVoice(); };
+
+        noteRecognition.start();
+      } else {
+        if (noteRecognition) noteRecognition.stop();
+        stopNoteVoice();
+      }
+    }
+
+    function stopNoteVoice() {
+      isNoteListening = false;
+      const voiceBtn = document.getElementById('voiceBtn');
+      if (voiceBtn) {
+        voiceBtn.className = "btn btn-primary";
+        voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Yaz';
       }
     }
 
@@ -861,6 +1323,8 @@
     }
 
     function closeNoteModal() {
+      if (isNoteListening && noteRecognition) { noteRecognition.stop(); }
+      stopNoteVoice();
       document.getElementById('noteModal').style.display = 'none';
     }
 
