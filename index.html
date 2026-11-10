@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Not Defteri & Güvenli Asistan Portal</title>
-  
+
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0f172a">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -24,7 +25,6 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent-blue: #3b82f6;
-      --accent-hover: #2563eb;
       --accent-green: #10b981;
       --accent-amber: #f59e0b;
       --accent-rose: #ef4444;
@@ -49,597 +49,352 @@
       padding-bottom: 70px;
     }
 
-    /* 🔒 ŞIK GİRİŞ EKRANI (LOCK SCREEN OVERLAY) */
+    /* 🔒 GİRİŞ EKRANI */
     #lockScreenOverlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      position: fixed; inset: 0;
       background: linear-gradient(135deg, #0b1120 0%, #0f172a 50%, #1e1b4b 100%);
       z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 20px;
     }
-
     .lock-card {
       background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 32px 24px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
+      border-radius: 20px; padding: 32px 24px;
+      width: 100%; max-width: 380px; text-align: center;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
-
     .lock-logo {
-      width: 64px;
-      height: 64px;
+      width: 64px; height: 64px;
       background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-      border-radius: 16px;
-      margin: 0 auto 16px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 28px;
+      border-radius: 16px; margin: 0 auto 16px auto;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 28px;
       box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
     }
-
-    .lock-title {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      color: var(--text-main);
-    }
-
-    .lock-subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-
-    .lock-input-group {
-      position: relative;
-      margin-bottom: 16px;
-    }
-
+    .lock-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .lock-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .lock-input-group { position: relative; margin-bottom: 16px; }
     .lock-input {
-      width: 100%;
-      padding: 12px 16px 12px 42px;
+      width: 100%; padding: 12px 42px 12px 42px;
       background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      color: white;
-      font-size: 15px;
-      outline: none;
-      transition: all 0.2s;
+      border: 1px solid var(--card-border); border-radius: 12px;
+      color: white; font-size: 15px; outline: none; transition: all 0.2s;
     }
-
-    .lock-input:focus {
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
-    }
-
-    .lock-input-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 16px;
-    }
-
+    .lock-input:focus { border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
+    .lock-input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; }
+    .lock-eye { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; cursor: pointer; }
     .lock-btn {
-      width: 100%;
-      padding: 12px;
+      width: 100%; padding: 12px;
       background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-      transition: all 0.2s;
+      color: white; border: none; border-radius: 12px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: all 0.2s;
     }
+    .lock-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .lock-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .lock-error { color: var(--accent-rose); font-size: 12px; margin-top: 10px; display: none; }
 
-    .lock-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .lock-error {
-      color: var(--accent-rose);
-      font-size: 12px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* ANA PORTAL YAPISI */
+    /* YAPI */
     .sidebar {
       width: var(--sidebar-width);
       background-color: #0b1120;
       border-right: 1px solid var(--card-border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; bottom: 0; left: 0;
-      z-index: 100;
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
     }
-
-    .brand {
-      padding: 20px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--card-border);
-    }
-
+    .brand { padding: 20px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--card-border); }
     .brand i { font-size: 22px; color: var(--accent-blue); }
     .brand h2 { font-size: 16px; font-weight: 700; }
-
-    .nav-menu {
-      padding: 16px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex-grow: 1;
-    }
-
+    .nav-menu { padding: 16px 10px; display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      color: var(--text-muted);
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 14px;
-      transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      color: var(--text-muted); border-radius: 10px; cursor: pointer;
+      font-weight: 500; font-size: 14px; transition: all 0.2s ease; text-decoration: none;
     }
-
     .nav-item:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
-    .nav-item.active { background-color: var(--accent-blue); color: #ffffff; font-weight: 600; }
+    .nav-item.active { background-color: var(--accent-blue); color: #fff; font-weight: 600; }
 
     .status-box {
-      padding: 14px;
-      margin: 14px;
+      padding: 14px; margin: 14px;
       background-color: rgba(30, 41, 59, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      font-size: 12px;
+      border: 1px solid var(--card-border); border-radius: 12px; font-size: 12px;
     }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-rose); }
+    .status-indicator { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-weight: 600; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-rose); flex-shrink: 0; }
     .dot.connected { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .dot.cached { background-color: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
+    .status-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
 
     .main-content {
       margin-left: var(--sidebar-width);
-      flex-grow: 1;
-      padding: 24px;
+      flex-grow: 1; padding: 24px;
       max-width: calc(100vw - var(--sidebar-width));
+      min-width: 0;
     }
-
     .page-section { display: none; }
     .page-section.active { display: block; }
 
     .header-title {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
+      font-size: 22px; font-weight: 800; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
     }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .btn {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: none;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
+      padding: 10px 16px; border-radius: 8px; border: none;
+      font-weight: 600; font-size: 13px; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
     }
-
+    .btn:hover { filter: brightness(1.1); }
     .btn-primary { background-color: var(--accent-blue); color: white; }
     .btn-success { background-color: var(--accent-green); color: white; }
     .btn-purple { background-color: var(--accent-purple); color: white; }
     .btn-secondary { background-color: var(--card-dark); color: var(--text-main); border: 1px solid var(--card-border); }
     .btn-danger { background-color: var(--accent-rose); color: white; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
 
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
     .form-control {
-      width: 100%;
-      padding: 10px 14px;
+      width: 100%; padding: 10px 14px;
       background-color: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
+      border: 1px solid var(--card-border); border-radius: 8px;
+      color: var(--text-main); font-size: 14px; outline: none;
     }
+    .form-control:focus { border-color: var(--accent-blue); }
+    select.form-control option { background: #1e293b; }
 
+    /* AI */
     .ai-assistant-container {
-      background: var(--card-dark);
-      border: 1px solid var(--accent-purple);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
+      background: var(--card-dark); border: 1px solid var(--accent-purple);
+      border-radius: 14px; padding: 20px; margin-bottom: 20px;
       box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
     }
-
     .ai-chat-box {
-      background: rgba(11, 17, 32, 0.95);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 16px;
-      min-height: 120px;
-      max-height: 350px;
-      overflow-y: auto;
-      font-size: 14px;
-      color: var(--text-main);
-      line-height: 1.6;
-      margin-top: 12px;
+      background: rgba(11, 17, 32, 0.95); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 16px; min-height: 120px; max-height: 380px;
+      overflow-y: auto; font-size: 14px; line-height: 1.6; margin-top: 12px;
     }
+    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .chip {
+      font-size: 12px; padding: 5px 12px; border-radius: 20px; cursor: pointer;
+      background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #c4b5fd; font-weight: 600; transition: all .2s;
+    }
+    .chip:hover { background: rgba(139, 92, 246, 0.3); }
+    .chip.active { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+    .chip.tag-chip { background: rgba(59,130,246,.1); border-color: rgba(59,130,246,.4); color: #93c5fd; }
+    .chip.tag-chip.active { background: var(--accent-blue); color: #fff; }
 
     .pinpoint-result-card {
-      background: rgba(139, 92, 246, 0.1);
-      border: 1px solid var(--accent-purple);
-      border-radius: 8px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
+      background: rgba(139, 92, 246, 0.1); border: 1px solid var(--accent-purple);
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;
     }
     .pinpoint-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--accent-purple);
-      font-weight: 700;
-      margin-bottom: 6px;
-      text-transform: uppercase;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--accent-purple); font-weight: 700;
+      margin-bottom: 6px; text-transform: uppercase; gap: 8px;
     }
-    .pinpoint-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 8px;
-      font-size: 13px;
-    }
-    .pinpoint-item {
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
+    .pinpoint-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; font-size: 13px; }
+    .pinpoint-item { background: rgba(15, 23, 42, 0.6); padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
     .pinpoint-label { font-size: 11px; color: var(--text-muted); font-weight: 600; display: block; }
-    .pinpoint-val { font-size: 13.5px; color: var(--text-main); font-weight: 700; }
+    .pinpoint-val { font-size: 13.5px; color: var(--text-main); font-weight: 700; word-break: break-word; }
 
+    /* MODAL */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.75); z-index: 1000;
+      align-items: center; justify-content: center; padding: 16px;
     }
-
     .modal-card {
-      background: var(--card-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 20px;
-      width: 100%;
-      max-width: 440px;
+      background: var(--card-dark); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 20px; width: 100%; max-width: 440px;
+      max-height: 92vh; overflow-y: auto;
     }
 
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .card {
-      background-color: var(--card-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px;
-    }
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+    .card { background-color: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
 
     .note-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
+    .note-card.pinned { border-color: var(--accent-amber); box-shadow: 0 0 0 1px rgba(245,158,11,.25); }
     .note-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-    .note-tag {
-      font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase;
-      background-color: rgba(59, 130, 246, 0.2); color: var(--accent-blue);
-    }
-    .note-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-    .note-body { font-size: 13px; color: var(--text-muted); white-space: pre-wrap; line-height: 1.4; }
+    .note-actions { display: flex; gap: 12px; font-size: 13px; }
+    .note-actions i { cursor: pointer; color: var(--text-muted); transition: color .2s; }
+    .note-actions i:hover { color: var(--text-main); }
+    .note-actions i.pin-on { color: var(--accent-amber); }
+    .note-actions i.del:hover { color: var(--accent-rose); }
+    .note-tag { font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; background-color: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+    .note-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; word-break: break-word; }
+    .note-body { font-size: 13px; color: var(--text-muted); white-space: pre-wrap; line-height: 1.4; word-break: break-word; }
     .note-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--card-border); font-size: 11px; color: var(--text-muted); }
+    .empty-state { color: var(--text-muted); padding: 24px; text-align: center; grid-column: 1 / -1; }
 
-    .calendar-container {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 20px;
-    }
+    /* DASHBOARD */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .stat-card { background: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+    .stat-card .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .stat-card .stat-value { font-size: 28px; font-weight: 800; margin-top: 6px; }
+    .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .chart-card { background: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+    .chart-card h4 { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
+    .chart-box { position: relative; height: 240px; }
 
-    .calendar-card { background-color: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+    /* TAKVİM */
+    .calendar-container { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+    .calendar-card { background-color: var(--card-dark); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; align-self: start; }
     .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .calendar-header h3 { font-size: 15px; font-weight: 700; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
     .cal-day-name { font-size: 10px; font-weight: 700; color: var(--text-muted); padding: 4px 0; }
-    
     .cal-day {
-      padding: 8px 0;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      background-color: rgba(15, 23, 42, 0.5);
-      border: 1px solid transparent;
-      transition: all 0.2s;
+      padding: 8px 0; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+      background-color: rgba(15, 23, 42, 0.5); border: 1px solid transparent;
+      transition: all 0.2s; position: relative;
     }
     .cal-day:hover { background-color: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); }
     .cal-day.selected { background-color: var(--accent-blue); color: white; }
     .cal-day.today { border: 2px solid var(--accent-green) !important; font-weight: 800; color: var(--accent-green); }
     .cal-day.selected.today { color: white; }
+    .cal-day.has-note::before, .cal-day.has-data::after {
+      content: ''; position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%;
+    }
+    .cal-day.has-note::before { background: var(--accent-amber); left: calc(50% - 5px); }
+    .cal-day.has-data::after { background: var(--accent-green); left: calc(50% + 1px); }
+    .cal-legend { display: flex; gap: 14px; font-size: 11px; color: var(--text-muted); margin-top: 12px; justify-content: center; }
+    .cal-legend span::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+    .cal-legend .l-note::before { background: var(--accent-amber); }
+    .cal-legend .l-data::before { background: var(--accent-green); }
 
+    /* RAPOR KAĞIDI */
     .daily-report-paper {
-      background-color: #ffffff;
-      color: #0f172a;
-      padding: 28px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      border: 1px solid #e2e8f0;
-      position: relative;
+      background-color: #ffffff; color: #0f172a; padding: 28px; border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 1px solid #e2e8f0; position: relative; min-width: 0;
     }
-
-    .daily-report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 14px;
-      margin-bottom: 16px;
-    }
-
-    .report-brand-area {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
+    .daily-report-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 16px; gap: 10px; }
+    .report-brand-area { display: flex; align-items: center; gap: 14px; }
     .us-logo-badge {
-      width: 46px;
-      height: 46px;
+      width: 46px; height: 46px; flex-shrink: 0;
       background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: 900;
-      font-size: 14px;
-      line-height: 1;
-      letter-spacing: 0.5px;
+      border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #fff; font-weight: 900; font-size: 14px; line-height: 1; letter-spacing: 0.5px;
       box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
     }
-
-    .daily-report-header h2 { 
-      font-size: 18px; 
-      color: #0f172a; 
-      font-weight: 800; 
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
-    }
-    
-    .daily-report-header span { 
-      font-size: 12px; 
-      color: #475569; 
-      font-weight: 600;
-      display: block;
-      margin-top: 2px;
-    }
-
+    .daily-report-header h2 { font-size: 18px; color: #0f172a; font-weight: 800; letter-spacing: -0.5px; text-transform: uppercase; }
+    .daily-report-header span { font-size: 12px; color: #475569; font-weight: 600; display: block; margin-top: 2px; }
     .compact-metrics-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 8px 14px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 12px;
-      color: #334155;
-      font-weight: 600;
+      display: flex; align-items: center; justify-content: space-between;
+      background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 14px;
+      border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: #334155; font-weight: 600;
     }
-
-    .compact-metrics-bar span {
-      font-weight: 800;
-      color: #0f172a;
-      background: #e2e8f0;
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-left: 4px;
-    }
-
+    .compact-metrics-bar span { font-weight: 800; color: #0f172a; background: #e2e8f0; padding: 2px 8px; border-radius: 6px; margin-left: 4px; }
     .report-section-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 16px 0 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-left: 4px solid #3b82f6;
-      padding-left: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 13px; font-weight: 800; color: #0f172a; margin: 16px 0 8px 0;
+      display: flex; align-items: center; gap: 6px; border-left: 4px solid #3b82f6;
+      padding-left: 8px; text-transform: uppercase; letter-spacing: 0.5px;
     }
-
-    .sub-sheet-container {
-      margin-bottom: 20px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fff;
-    }
-
-    .sub-sheet-title {
-      background: #1e293b;
-      color: #ffffff;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
+    .sub-sheet-container { margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #fff; }
+    .sub-sheet-title { background: #1e293b; color: #fff; padding: 8px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
     .table-wrapper { overflow-x: auto; width: 100%; }
     .report-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
-    .report-table th { background-color: #334155; color: #ffffff; border: 1px solid #cbd5e1; padding: 8px 10px; font-weight: 700; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
+    .report-table th { background-color: #334155; color: #fff; border: 1px solid #cbd5e1; padding: 8px 10px; font-weight: 700; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
     .report-table td { border: 1px solid #cbd5e1; padding: 8px 10px; color: #1e293b; font-weight: 500; font-size: 13px; }
     .report-table tbody tr:nth-child(even) { background-color: #f8fafc; }
-
+    .report-note { font-size: 12px; color: #64748b; padding: 8px 12px; background: #fffbeb; border-top: 1px solid #fde68a; }
     .mobile-card-item { display: none; }
+    .mobile-list { display: none; }
+
+    /* TOAST */
+    #toastWrap { position: fixed; top: 16px; right: 16px; z-index: 12000; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 32px); }
+    .toast {
+      background: #0b1120; border: 1px solid var(--card-border); border-left: 4px solid var(--accent-blue);
+      color: var(--text-main); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,.4); animation: toastIn .25s ease;
+    }
+    .toast.ok { border-left-color: var(--accent-green); }
+    .toast.err { border-left-color: var(--accent-rose); }
+    .toast.warn { border-left-color: var(--accent-amber); }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 
     @media (max-width: 768px) {
       body { padding-bottom: 75px; }
-
       .sidebar {
-        width: 100%;
-        height: 60px;
-        top: auto; bottom: 0; left: 0; right: 0;
-        flex-direction: row;
-        border-right: none;
-        border-top: 1px solid var(--card-border);
-        background-color: #0b1120;
+        width: 100%; height: 60px; top: auto; bottom: 0; left: 0; right: 0;
+        flex-direction: row; border-right: none; border-top: 1px solid var(--card-border);
       }
-
-      .brand, .status-box { display: none; }
-      
-      .nav-menu {
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        padding: 0;
-      }
-
-      .nav-item {
-        flex-direction: column;
-        gap: 4px;
-        padding: 6px;
-        font-size: 10px;
-        border-radius: 6px;
-      }
-
+      .brand, .status-box, #sidebarInstallWrapper { display: none; }
+      .nav-menu { flex-direction: row; justify-content: space-around; align-items: center; width: 100%; padding: 0; }
+      .nav-item { flex-direction: column; gap: 4px; padding: 6px; font-size: 10px; border-radius: 6px; text-align: center; }
       .nav-item i { font-size: 18px; }
-
-      .main-content {
-        margin-left: 0;
-        max-width: 100vw;
-        padding: 16px;
-      }
-
+      .main-content { margin-left: 0; max-width: 100vw; padding: 16px; }
       .calendar-container { grid-template-columns: 1fr; }
       .header-title { font-size: 18px; }
-      .btn { width: 100%; justify-content: center; }
+      .header-actions { width: 100%; }
+      .header-actions .btn { flex: 1; justify-content: center; }
       .compact-metrics-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+      .daily-report-paper { padding: 18px; }
+      .daily-report-header h2 { font-size: 15px; }
+      #toastWrap { left: 16px; }
 
       .desktop-table-view { display: none !important; }
+      .mobile-list { display: block; padding: 8px; }
       .mobile-card-item {
-        display: block;
-        background: #f8fafc;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        display: block; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+        padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
       }
-      .mobile-card-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12.5px;
-        padding: 5px 0;
-        border-bottom: 1px solid #e2e8f0;
-      }
+      .mobile-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; padding: 5px 0; border-bottom: 1px solid #e2e8f0; gap: 8px; }
       .mobile-card-row:last-child { border-bottom: none; }
       .mobile-card-label { font-weight: 700; color: #475569; width: 45%; }
       .mobile-card-val { font-weight: 600; color: #0f172a; width: 50%; text-align: right; word-break: break-word; }
     }
 
     @media print {
-      body { background-color: #ffffff !important; color: #0f172a !important; padding-bottom: 0 !important; font-size: 15px !important; }
-      .sidebar, .btn, .no-print, .modal-overlay, .calendar-card, .header-title, #analysisSearchFormArea { display: none !important; }
+      body { background-color: #fff !important; color: #0f172a !important; padding-bottom: 0 !important; font-size: 15px !important; }
+      .sidebar, .btn, .no-print, .modal-overlay, .calendar-card, .header-title, #analysisSearchFormArea, #toastWrap, #lockScreenOverlay { display: none !important; }
       .main-content { margin-left: 0 !important; max-width: 100% !important; padding: 0 !important; }
       .calendar-container { grid-template-columns: 1fr !important; }
       .daily-report-paper { box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; border: none !important; display: block !important; }
       .page-section { display: none !important; }
       #calendarSection.active, #analysisSection.active { display: block !important; }
       .us-logo-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #dc2626 !important; }
-      .sub-sheet-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #1e293b !important; color: #ffffff !important; }
-      .report-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #334155 !important; color: #ffffff !important; font-size: 12px !important; }
+      .sub-sheet-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #1e293b !important; color: #fff !important; }
+      .report-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #334155 !important; color: #fff !important; font-size: 12px !important; }
       .report-table td { font-size: 13px !important; padding: 10px !important; }
       .daily-report-header h2 { font-size: 20px !important; }
       .compact-metrics-bar { font-size: 13px !important; }
       .desktop-table-view { display: block !important; }
-      .mobile-card-item { display: none !important; }
+      .mobile-list, .mobile-card-item { display: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔒 DIŞARIDAKI ŞIK ŞİFRE GİRİŞ EKRANI -->
+  <div id="toastWrap"></div>
+
+  <!-- 🔒 GİRİŞ EKRANI -->
   <div id="lockScreenOverlay">
     <div class="lock-card">
-      <div class="lock-logo">
-        <i class="fa-solid fa-shield-halved"></i>
-      </div>
+      <div class="lock-logo"><i class="fa-solid fa-shield-halved"></i></div>
       <div class="lock-title">Yetkili Girişi</div>
       <div class="lock-subtitle">Umut Salman Asistan Portalına Hoş Geldiniz</div>
-      
+
       <div class="lock-input-group">
         <i class="fa-solid fa-key lock-input-icon"></i>
-        <input type="password" id="portalPasswordInput" class="lock-input" placeholder="Şifrenizi girin..." onkeyup="if(event.key==='Enter') checkPortalPassword()">
+        <input type="password" id="portalPasswordInput" class="lock-input" placeholder="Şifrenizi girin..." autocomplete="current-password" onkeyup="if(event.key==='Enter') checkPortalPassword()">
+        <i class="fa-solid fa-eye lock-eye" id="lockEye" onclick="togglePassVisibility()"></i>
       </div>
 
-      <button class="lock-btn" onclick="checkPortalPassword()">
+      <button class="lock-btn" id="lockBtn" onclick="checkPortalPassword()">
         <i class="fa-solid fa-lock-open"></i> Giriş Yap
       </button>
 
-      <div class="lock-error" id="lockErrorMsg">
-        <i class="fa-solid fa-triangle-exclamation"></i> Hatalı şifre! Lütfen tekrar deneyin.
-      </div>
+      <div class="lock-error" id="lockErrorMsg"></div>
     </div>
   </div>
 
-  <!-- Sidebar Nav -->
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
       <i class="fa-solid fa-book-bookmark"></i>
@@ -647,23 +402,29 @@
     </div>
 
     <nav class="nav-menu">
-      <a class="nav-item active" onclick="switchTab('notes')">
-        <i class="fa-solid fa-robot"></i> <span>Yapay Zeka Asistan</span>
+      <a class="nav-item active" data-tab="notes" onclick="switchTab('notes')">
+        <i class="fa-solid fa-robot"></i> <span>Asistan</span>
       </a>
-      <a class="nav-item" onclick="switchTab('calendar')">
+      <a class="nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <i class="fa-solid fa-chart-pie"></i> <span>Özet</span>
+      </a>
+      <a class="nav-item" data-tab="calendar" onclick="switchTab('calendar')">
         <i class="fa-solid fa-calendar-days"></i> <span>Takvim</span>
       </a>
-      <a class="nav-item" onclick="switchTab('analysis')">
+      <a class="nav-item" data-tab="analysis" onclick="switchTab('analysis')">
         <i class="fa-solid fa-magnifying-glass-chart"></i> <span>Analiz</span>
       </a>
-      <a class="nav-item" onclick="switchTab('settings')">
+      <a class="nav-item" data-tab="settings" onclick="switchTab('settings')">
         <i class="fa-solid fa-gear"></i> <span>Ayarlar</span>
       </a>
     </nav>
 
     <div style="padding: 0 14px 8px 14px;" id="sidebarInstallWrapper">
-      <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 11px; padding: 8px;" onclick="installAppPrompt()">
+      <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 11px; padding: 8px; margin-bottom: 6px;" onclick="installAppPrompt()">
         <i class="fa-solid fa-mobile-screen-button"></i> Uygulamayı Yükle
+      </button>
+      <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 11px; padding: 8px;" onclick="lockPortal()">
+        <i class="fa-solid fa-lock"></i> Kilitle
       </button>
     </div>
 
@@ -673,18 +434,19 @@
         <span class="dot" id="statusDot"></span>
         <span id="statusText">Bağlantı Yok</span>
       </div>
+      <div class="status-sub" id="statusSub"></div>
     </div>
   </aside>
 
-  <!-- Main View -->
+  <!-- Ana içerik -->
   <main class="main-content">
 
-    <!-- PAGE: NOTES & AI ASSISTANT -->
+    <!-- ASİSTAN & NOTLAR -->
     <section id="notesSection" class="page-section active">
       <div class="header-title">
         <span>Yapay Zeka Asistanı</span>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-secondary" onclick="checkConnection()">
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="checkConnection(true)">
             <i class="fa-solid fa-rotate"></i> E-Tablodan Eşitle
           </button>
           <button class="btn btn-primary" onclick="openNoteModal()">
@@ -693,77 +455,106 @@
         </div>
       </div>
 
-      <!-- KUSURSUZ NİYET AYRIŞTIRMALI YAPAY ZEKA ASİSTAN PANELİ -->
       <div class="ai-assistant-container">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <b style="font-size: 15px; display: flex; align-items: center; gap: 8px; color: var(--accent-purple);">
             <i class="fa-solid fa-brain"></i> Akıllı Niyet ve Kapsam Ayrıştırma Asistanı
           </b>
           <div style="display: flex; gap: 6px;">
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="toggleAiVoiceInput()" id="aiVoiceBtn">
+            <button class="btn btn-secondary btn-sm" onclick="toggleAiVoiceInput()" id="aiVoiceBtn">
               <i class="fa-solid fa-microphone"></i> Sesle Sor
             </button>
-            <button class="btn btn-purple" style="padding: 6px 12px; font-size: 12px;" onclick="speakLastAiAnswer()">
+            <button class="btn btn-purple btn-sm" onclick="speakLastAiAnswer()">
               <i class="fa-solid fa-volume-high"></i> Sesli Dinle
             </button>
           </div>
         </div>
-        
-        <div class="form-group" style="margin-top: 12px; margin-bottom: 0; display: flex; gap: 8px;">
-          <input type="text" id="aiQueryInput" class="form-control" placeholder="Örn: 'Ahmet Kandiş notları göster' veya 'Ahmet Kandiş kartezyen'" onkeyup="if(event.key==='Enter') runAiMasterQuery()">
-          <button class="btn btn-purple" onclick="runAiMasterQuery()" style="background-color: var(--accent-purple);">
+
+        <div class="form-group" style="margin-top: 12px; margin-bottom: 0; display: flex; gap: 8px; flex-wrap: wrap;">
+          <input type="text" id="aiQueryInput" class="form-control" style="flex:1; min-width: 200px;" placeholder="Örn: 'Ahmet Kandiş notları göster' veya 'Ahmet Kandiş kartezyen'" onkeyup="if(event.key==='Enter') runAiMasterQuery()">
+          <button class="btn btn-purple" onclick="runAiMasterQuery()">
             <i class="fa-solid fa-wand-magic-sparkles"></i> AI Analiz Et
           </button>
         </div>
 
+        <div class="chip-row" id="aiHistoryChips"></div>
+
         <div class="ai-chat-box" id="aiChatOutput">
-          Umut Bey, portalımız şifre korumasıyla güvence altına alındı. <b>"Ahmet Kandiş notları göster"</b> veya <b>"Ahmet Kandiş kartezyen"</b> sorgularını anında nokta atışı yapabilirsiniz.
+          Umut Bey, portalınız şifre korumasıyla güvende. <b>"Ahmet Kandiş notları göster"</b> veya <b>"Ahmet Kandiş kartezyen"</b> gibi sorgularla anında sonuç alabilirsiniz. Türkçe karakter yazmanız şart değil ("kandis" de "Kandiş"i bulur).
         </div>
       </div>
 
       <div class="form-group">
         <input type="text" id="noteSearchInput" class="form-control" placeholder="Notlarda kelime ara..." oninput="renderNotes()">
       </div>
+      <div class="chip-row" id="tagFilterRow" style="margin: -4px 0 6px 0;"></div>
 
       <div class="grid-cards" id="notesGrid"></div>
     </section>
 
-    <!-- PAGE: CALENDAR & DAILY REPORT -->
+    <!-- ÖZET -->
+    <section id="dashboardSection" class="page-section">
+      <div class="header-title">
+        <span>Genel Özet</span>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="checkConnection(true)">
+            <i class="fa-solid fa-rotate"></i> Yenile
+          </button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h4><i class="fa-solid fa-chart-bar"></i> Son 7 Gün (Not ve E-Tablo Kaydı)</h4>
+          <div class="chart-box"><canvas id="chartWeek"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h4><i class="fa-solid fa-tags"></i> Notların Kategori Dağılımı</h4>
+          <div class="chart-box"><canvas id="chartTags"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h4><i class="fa-solid fa-table"></i> Sayfa Başına Kayıt (İlk 8)</h4>
+          <div class="chart-box"><canvas id="chartSheets"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAKVİM -->
     <section id="calendarSection" class="page-section">
       <div class="header-title">
         <span>Takvim & Günlük Rapor</span>
-        <button class="btn btn-primary" onclick="window.print()">
-          <i class="fa-solid fa-print"></i> Günlük Raporu PDF / Yazdır
-        </button>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="goToday()">
+            <i class="fa-solid fa-calendar-day"></i> Bugün
+          </button>
+          <button class="btn btn-primary" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Günlük Raporu PDF / Yazdır
+          </button>
+        </div>
       </div>
 
       <div class="calendar-container">
         <div class="calendar-card">
           <div class="calendar-header">
-            <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-            <h3 id="calMonthYear">Kasım 2026</h3>
-            <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <h3 id="calMonthYear">-</h3>
+            <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
           </div>
 
           <div class="calendar-grid">
-            <div class="cal-day-name">Pt</div>
-            <div class="cal-day-name">Sa</div>
-            <div class="cal-day-name">Ça</div>
-            <div class="cal-day-name">Pe</div>
-            <div class="cal-day-name">Cu</div>
-            <div class="cal-day-name">Ct</div>
-            <div class="cal-day-name">Pz</div>
+            <div class="cal-day-name">Pt</div><div class="cal-day-name">Sa</div><div class="cal-day-name">Ça</div>
+            <div class="cal-day-name">Pe</div><div class="cal-day-name">Cu</div><div class="cal-day-name">Ct</div><div class="cal-day-name">Pz</div>
           </div>
           <div class="calendar-grid" id="calDaysGrid"></div>
+          <div class="cal-legend"><span class="l-note">Not var</span><span class="l-data">E-Tablo kaydı var</span></div>
         </div>
 
         <div class="daily-report-paper">
           <div class="daily-report-header">
             <div class="report-brand-area">
-              <div class="us-logo-badge">
-                <div>U</div>
-                <div>S</div>
-              </div>
+              <div class="us-logo-badge"><div>U</div><div>S</div></div>
               <div>
                 <h2>GÜNLÜK VERİ & PERFORMANS RAPORU</h2>
                 <span id="dailyRptDateStr">Tarih: -</span>
@@ -778,12 +569,11 @@
             <div>Durum: <span style="color: #10b981; background: #d1fae5;">AKTİF</span></div>
           </div>
 
-          <div class="report-section-title">
-            <i class="fa-solid fa-sticky-note" style="color:#f59e0b;"></i> O GÜNE AİT NOTLAR
+          <div class="report-section-title" style="justify-content: space-between;">
+            <span><i class="fa-solid fa-sticky-note" style="color:#f59e0b;"></i> O GÜNE AİT NOTLAR</span>
+            <button class="btn btn-primary btn-sm no-print" onclick="openNoteModal(selectedDateStr)"><i class="fa-solid fa-plus"></i> Bu güne not ekle</button>
           </div>
-          <div id="dayNotesContainer">
-            <i>Veri bulunamadı.</i>
-          </div>
+          <div id="dayNotesContainer"><i>Veri bulunamadı.</i></div>
 
           <div class="report-section-title" style="margin-top:18px;">
             <i class="fa-solid fa-table" style="color:#10b981;"></i> O GÜNE AİT E-TABLO KAYITLARI
@@ -795,20 +585,27 @@
       </div>
     </section>
 
-    <!-- PAGE: ANALYSIS -->
+    <!-- ANALİZ -->
     <section id="analysisSection" class="page-section">
       <div class="header-title">
         <span>Akıllı E-Tablo Analizi</span>
-        <button class="btn btn-primary" onclick="window.print()">
-          <i class="fa-solid fa-print"></i> Analiz Raporunu PDF / Yazdır
-        </button>
+        <div class="header-actions">
+          <button class="btn btn-success" onclick="exportAnalysisCsv()">
+            <i class="fa-solid fa-file-csv"></i> Excel (CSV) İndir
+          </button>
+          <button class="btn btn-primary" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> PDF / Yazdır
+          </button>
+        </div>
       </div>
 
       <div id="analysisSearchFormArea" class="card" style="margin-bottom: 20px;">
         <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 0;">
-          <label>Arama Kriterleri:</label>
+          <label>Arama Kriterleri (tüm kelimeler satırda geçmeli):</label>
           <input type="text" id="sheetQueryInput" class="form-control" placeholder="Örn: Kasa Önü Mağaza Vardiya M4" onkeyup="if(event.key==='Enter') runSmartDataAnalysis()">
-          <button class="btn btn-primary" onclick="runSmartDataAnalysis()" style="width: fit-content;">
+          <label style="margin-top: 6px;">Sayfa:</label>
+          <select id="sheetSelect" class="form-control"><option value="">Tüm sayfalar (otomatik)</option></select>
+          <button class="btn btn-primary" onclick="runSmartDataAnalysis()" style="width: fit-content; margin-top: 4px;">
             <i class="fa-solid fa-wand-magic-sparkles"></i> Analiz Et
           </button>
         </div>
@@ -817,10 +614,7 @@
       <div class="daily-report-paper">
         <div class="daily-report-header">
           <div class="report-brand-area">
-            <div class="us-logo-badge">
-              <div>U</div>
-              <div>S</div>
-            </div>
+            <div class="us-logo-badge"><div>U</div><div>S</div></div>
             <div>
               <h2>E-TABLO ANALİZ VE SORGULAMA RAPORU</h2>
               <span id="analysisReportInfo">Arama Bekleniyor...</span>
@@ -835,25 +629,20 @@
           <div>Durum: <span style="color: #10b981; background: #d1fae5;">HAZIR</span></div>
         </div>
 
-        <div class="report-section-title">
-          <i class="fa-solid fa-table" style="color:#10b981;"></i> ANALİZ SONUÇLARI
-        </div>
-        
+        <div class="report-section-title"><i class="fa-solid fa-table" style="color:#10b981;"></i> ANALİZ SONUÇLARI</div>
+
         <div id="analysisTablesContainer">
-          <div style="color: #64748b; padding: 16px; text-align: center;">
-            Arama yapmak için yukarıdaki arama kutusunu kullanınız.
-          </div>
+          <div style="color: #64748b; padding: 16px; text-align: center;">Arama yapmak için yukarıdaki arama kutusunu kullanınız.</div>
         </div>
       </div>
     </section>
 
-    <!-- PAGE: SETTINGS -->
+    <!-- AYARLAR -->
     <section id="settingsSection" class="page-section">
-      <div class="header-title">
-        <span>Apps Script Ayarları & Mobil Kurulum</span>
-      </div>
+      <div class="header-title"><span>Ayarlar & Mobil Kurulum</span></div>
 
       <div class="card" style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 12px;"><i class="fa-solid fa-link" style="color: var(--accent-green);"></i> Apps Script Bağlantısı</h3>
         <div class="form-group">
           <label>Apps Script Web App URL Adresi:</label>
           <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
@@ -863,12 +652,39 @@
         </button>
       </div>
 
+      <div class="card" style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 12px;"><i class="fa-solid fa-key" style="color: var(--accent-amber);"></i> Şifre ve Güvenlik</h3>
+        <div class="form-group"><label>Mevcut Şifre:</label><input type="password" id="curPassInput" class="form-control" autocomplete="current-password"></div>
+        <div class="form-group"><label>Yeni Şifre (en az 8 karakter):</label><input type="password" id="newPassInput" class="form-control" autocomplete="new-password"></div>
+        <div class="form-group"><label>Yeni Şifre (tekrar):</label><input type="password" id="newPassInput2" class="form-control" autocomplete="new-password"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="changePassword()"><i class="fa-solid fa-floppy-disk"></i> Şifreyi Değiştir</button>
+          <button class="btn btn-secondary" onclick="lockPortal()"><i class="fa-solid fa-lock"></i> Şimdi Kilitle</button>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.5;">
+          Portal 5 dakika işlem yapılmazsa otomatik kilitlenir. 5 hatalı denemeden sonra giriş 30 saniye bekletilir.
+        </p>
+      </div>
+
+      <div class="card" style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 8px;"><i class="fa-solid fa-box-archive" style="color: var(--accent-purple);"></i> Yedekleme</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+          Notlarınız bu cihazın tarayıcısında saklanır. Telefon değiştirirken veya tarayıcı verisi silinmeden önce yedek alın.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="exportNotes()"><i class="fa-solid fa-download"></i> Notları Yedekle (JSON)</button>
+          <button class="btn btn-secondary" onclick="$('importFile').click()"><i class="fa-solid fa-upload"></i> Yedekten Yükle</button>
+          <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importNotes(event)">
+          <button class="btn btn-secondary" onclick="clearSheetCache()"><i class="fa-solid fa-broom"></i> E-Tablo Önbelleğini Temizle</button>
+        </div>
+      </div>
+
       <div class="card" style="border-color: var(--accent-blue);">
         <h3 style="font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-mobile-screen-button" style="color: var(--accent-blue);"></i> Telefonunuza Uygulama Olarak Yükleyin
         </h3>
         <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.4;">
-          Bu portalı telefonunuzun ana ekranına bir mobil uygulama simgesi olarak ekleyebilir, tarayıcı çubukları olmadan tam ekran hızında kullanabilirsiniz.
+          Bu portalı ana ekrana ekleyip tarayıcı çubuklarısız, tam ekran kullanabilirsiniz.
         </p>
         <button class="btn btn-primary" onclick="installAppPrompt()">
           <i class="fa-solid fa-download"></i> Ana Ekrana Yükle / Ekle
@@ -878,21 +694,19 @@
 
   </main>
 
-  <!-- MODAL: ADD NOTE WITH VOICE RECOGNITION -->
+  <!-- MODAL: NOT EKLE / DÜZENLE -->
   <div class="modal-overlay" id="noteModal">
     <div class="modal-card">
-      <h3 style="margin-bottom: 14px; font-size: 16px;">Yeni Not Ekle</h3>
-      
+      <h3 style="margin-bottom: 14px; font-size: 16px;" id="noteModalTitle">Yeni Not Ekle</h3>
+
       <div class="form-group">
         <label>Tarih Seçin:</label>
         <input type="date" id="newNoteDateInput" class="form-control">
       </div>
-
       <div class="form-group">
         <label>Not Başlığı:</label>
         <input type="text" id="newNoteTitleInput" class="form-control" placeholder="Örn: Kasa Devir Teslimi">
       </div>
-
       <div class="form-group">
         <label>Kategori / Etiket:</label>
         <select id="newNoteTagInput" class="form-control">
@@ -902,11 +716,10 @@
           <option value="Vardiya">Vardiya</option>
         </select>
       </div>
-
       <div class="form-group">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
           <label style="margin-bottom: 0;">Not İçeriği:</label>
-          <button type="button" id="voiceBtn" class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;" onclick="toggleSpeechRecognition()">
+          <button type="button" id="voiceBtn" class="btn btn-primary btn-sm" onclick="toggleSpeechRecognition()">
             <i class="fa-solid fa-microphone"></i> Sesle Yaz
           </button>
         </div>
@@ -915,7 +728,7 @@
 
       <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
         <button class="btn btn-secondary" onclick="closeNoteModal()">İptal</button>
-        <button class="btn btn-success" onclick="saveNewNote()">
+        <button class="btn btn-success" id="saveNoteBtn" onclick="saveNewNote()">
           <i class="fa-solid fa-cloud-arrow-up"></i> Kaydet & Gönder
         </button>
       </div>
@@ -923,722 +736,1108 @@
   </div>
 
   <script>
-    let notes = JSON.parse(localStorage.getItem('user_notes') || '[]');
-    let scriptUrl = localStorage.getItem('gas_script_url') || 'https://script.google.com/macros/s/AKfycbz-NNEuFtIRHYr-k_QAdoRfTa_pUKirhyvH6jtyKTUEjz6KqqHKyiZKP6OaIYdmwKknWw/exec';
+    /* =========================================================
+       AYARLAR & DURUM
+       ========================================================= */
+    const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-NNEuFtIRHYr-k_QAdoRfTa_pUKirhyvH6jtyKTUEjz6KqqHKyiZKP6OaIYdmwKknWw/exec';
+    const DEFAULT_PASS_HASH = '195ddc8046810e9cbfc7b818160511d2e6da085499d766a22fcae5612c05ce4f';
+    const AUTO_LOCK_MS = 5 * 60 * 1000;
+    const AUTO_REFRESH_MS = 5 * 60 * 1000;
+    const MAX_ROWS_RENDER = 500;
+
+    const $ = id => document.getElementById(id);
+
+    function loadJson(key, fallback) {
+      try { const v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); }
+      catch (e) { return fallback; }
+    }
+    function saveJson(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+      catch (e) { return false; }
+    }
+
+    let notes = loadJson('user_notes', []);
+    let pendingNotes = loadJson('pending_notes', []);
+    let aiHistory = loadJson('ai_history', []);
+    let scriptUrl = localStorage.getItem('gas_script_url') || DEFAULT_SCRIPT_URL;
     let rawSheetData = null;
+    let dateIndex = new Map();
     let deferredPrompt = null;
-    let lastAiResponseText = "";
-    
+    let lastAiResponseText = '';
+    let editingNoteId = null;
+    let activeTagFilter = '';
+    let lastAnalysis = null;
+    let appUnlocked = false;
+    let refreshTimer = null;
+    let idleTimer = null;
+    let charts = {};
     let currentCalDate = new Date();
-    
-    const todayObj = new Date();
-    const todayStr = `${String(todayObj.getDate()).padStart(2, '0')}.${String(todayObj.getMonth() + 1).padStart(2, '0')}.${todayObj.getFullYear()}`;
-    let selectedDateStr = todayStr;
+    let selectedDateStr = getTodayStr();
 
-    // 🔒 ŞİFRE KONTROL FONKSİYONU (Varsayılan şifre: 68545051Us.)
-    function checkPortalPassword() {
-      const passInput = document.getElementById('portalPasswordInput').value.trim();
-      const errorMsg = document.getElementById('lockErrorMsg');
-      const correctPass = "68545051Us.";
+    /* =========================================================
+       YARDIMCILAR
+       ========================================================= */
+    function p2(n) { return String(n).padStart(2, '0'); }
+    function getTodayStr() {
+      const d = new Date();
+      return `${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()}`;
+    }
+    function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
-      if (passInput === correctPass) {
-        document.getElementById('lockScreenOverlay').style.display = 'none';
-        renderNotes();
-        renderCalendar();
-        if (scriptUrl) checkConnection();
+    function esc(v) {
+      return String(v === null || v === undefined ? '' : v)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function lc(s) { return String(s === null || s === undefined ? '' : s).toLocaleLowerCase('tr-TR'); }
+    function fold(s) {
+      return lc(s).replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g')
+        .replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/\u0307/g, '');
+    }
+
+    function cellToDateKey(v) {
+      if (v === null || v === undefined) return null;
+      const s = String(v).trim();
+      if (!s || s.length > 30) return null;
+      let m = s.match(/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})(?!\d)/);
+      if (m) return `${p2(m[1])}.${p2(m[2])}.${m[3]}`;
+      m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return `${m[3]}.${m[2]}.${m[1]}`;
+      if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+        const d = new Date(s);
+        if (!isNaN(d)) return `${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()}`;
+      }
+      return null;
+    }
+    function displayCell(v) {
+      if (v === null || v === undefined) return '';
+      const s = String(v);
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
+        const k = cellToDateKey(s);
+        if (k) return k;
+      }
+      return s;
+    }
+
+    function toast(msg, type) {
+      const el = document.createElement('div');
+      el.className = 'toast ' + (type || '');
+      el.textContent = msg;
+      $('toastWrap').appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; }, 2800);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* =========================================================
+       SHA-256
+       ========================================================= */
+    function sha256Fallback(str) {
+      const s = unescape(encodeURIComponent(str));
+      const K = [], H = [];
+      let p = 2;
+      const isPrime = x => { for (let i = 2; i * i <= x; i++) if (x % i === 0) return false; return true; };
+      while (K.length < 64) {
+        if (isPrime(p)) {
+          if (H.length < 8) H.push((Math.pow(p, 0.5) % 1) * 4294967296 | 0);
+          K.push((Math.pow(p, 1 / 3) % 1) * 4294967296 | 0);
+        }
+        p++;
+      }
+      const bytes = [];
+      for (let i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i));
+      const bitLen = bytes.length * 8;
+      bytes.push(0x80);
+      while (bytes.length % 64 !== 56) bytes.push(0);
+      for (let i = 7; i >= 0; i--) bytes.push(i >= 4 ? 0 : (bitLen >>> (i * 8)) & 255);
+      const rr = (x, n) => (x >>> n) | (x << (32 - n));
+      for (let o = 0; o < bytes.length; o += 64) {
+        const w = new Array(64);
+        for (let i = 0; i < 16; i++) {
+          w[i] = (bytes[o + i * 4] << 24) | (bytes[o + i * 4 + 1] << 16) | (bytes[o + i * 4 + 2] << 8) | bytes[o + i * 4 + 3];
+        }
+        for (let i = 16; i < 64; i++) {
+          const s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+          const s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+          w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+        }
+        let [a, b, c, d, e, f, g, h] = H;
+        for (let i = 0; i < 64; i++) {
+          const S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25);
+          const ch = (e & f) ^ (~e & g);
+          const t1 = (h + S1 + ch + K[i] + w[i]) | 0;
+          const S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22);
+          const mj = (a & b) ^ (a & c) ^ (b & c);
+          const t2 = (S0 + mj) | 0;
+          h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+        }
+        H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+        H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+      }
+      return H.map(x => (x >>> 0).toString(16).padStart(8, '0')).join('');
+    }
+
+    async function sha256(str) {
+      try {
+        if (window.crypto && crypto.subtle) {
+          const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+      } catch (e) {}
+      return sha256Fallback(str);
+    }
+
+    /* =========================================================
+       🔒 KİLİT EKRANI
+       ========================================================= */
+    function currentPassHash() { return localStorage.getItem('portal_pass_hash') || DEFAULT_PASS_HASH; }
+
+    function togglePassVisibility() {
+      const inp = $('portalPasswordInput');
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      $('lockEye').className = 'fa-solid lock-eye ' + (show ? 'fa-eye-slash' : 'fa-eye');
+    }
+
+    function showLockError(msg) {
+      const el = $('lockErrorMsg');
+      el.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + esc(msg);
+      el.style.display = 'block';
+    }
+
+    let lockCountdownTimer = null;
+    function startLockCountdown(untilTs) {
+      const btn = $('lockBtn');
+      clearInterval(lockCountdownTimer);
+      const tick = () => {
+        const left = Math.ceil((untilTs - Date.now()) / 1000);
+        if (left <= 0) {
+          clearInterval(lockCountdownTimer);
+          btn.disabled = false;
+          $('lockErrorMsg').style.display = 'none';
+          return;
+        }
+        btn.disabled = true;
+        showLockError(`Çok fazla hatalı deneme. ${left} sn bekleyin.`);
+      };
+      tick();
+      lockCountdownTimer = setInterval(tick, 500);
+    }
+
+    async function checkPortalPassword() {
+      const lockUntil = parseInt(localStorage.getItem('lock_until') || '0', 10);
+      if (lockUntil > Date.now()) { startLockCountdown(lockUntil); return; }
+
+      const input = $('portalPasswordInput');
+      const pass = input.value.trim();
+      if (!pass) { showLockError('Lütfen şifrenizi girin.'); return; }
+
+      const hash = await sha256(pass);
+      if (hash === currentPassHash()) {
+        localStorage.removeItem('lock_until');
+        localStorage.setItem('fail_count', '0');
+        try { sessionStorage.setItem('portal_unlocked', '1'); } catch (e) {}
+        input.value = '';
+        $('lockErrorMsg').style.display = 'none';
+        unlockApp();
       } else {
-        errorMsg.style.display = 'block';
-        document.getElementById('portalPasswordInput').value = '';
-        document.getElementById('portalPasswordInput').focus();
+        const fails = parseInt(localStorage.getItem('fail_count') || '0', 10) + 1;
+        localStorage.setItem('fail_count', String(fails));
+        input.value = '';
+        input.focus();
+        if (fails >= 5) {
+          const until = Date.now() + 30000;
+          localStorage.setItem('lock_until', String(until));
+          localStorage.setItem('fail_count', '0');
+          startLockCountdown(until);
+        } else {
+          showLockError(`Hatalı şifre! Kalan deneme: ${5 - fails}`);
+        }
       }
     }
 
+    function lockPortal() {
+      appUnlocked = false;
+      try { sessionStorage.removeItem('portal_unlocked'); } catch (e) {}
+      clearInterval(refreshTimer);
+      clearTimeout(idleTimer);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      if (aiRecognition && isAiListening) { try { aiRecognition.stop(); } catch (e) {} }
+      closeNoteModal();
+      $('lockScreenOverlay').style.display = 'flex';
+      $('portalPasswordInput').value = '';
+      setTimeout(() => $('portalPasswordInput').focus(), 50);
+    }
+
+    function resetIdleTimer() {
+      if (!appUnlocked) return;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => { lockPortal(); }, AUTO_LOCK_MS);
+    }
+    ['click', 'keydown', 'touchstart', 'scroll'].forEach(ev =>
+      document.addEventListener(ev, resetIdleTimer, { passive: true }));
+
+    function unlockApp() {
+      appUnlocked = true;
+      $('lockScreenOverlay').style.display = 'none';
+      resetIdleTimer();
+      loadSheetCache();
+      renderTagFilters();
+      renderNotes();
+      renderAiHistory();
+      renderCalendar();
+      loadDateReport(selectedDateStr);
+      if (scriptUrl) checkConnection();
+      clearInterval(refreshTimer);
+      refreshTimer = setInterval(() => {
+        if (appUnlocked && document.visibilityState === 'visible') checkConnection();
+      }, AUTO_REFRESH_MS);
+    }
+
+    async function changePassword() {
+      const cur = $('curPassInput').value;
+      const n1 = $('newPassInput').value;
+      const n2 = $('newPassInput2').value;
+      if (!cur || !n1) return toast('Tüm alanları doldurun.', 'warn');
+      if ((await sha256(cur)) !== currentPassHash()) return toast('Mevcut şifre hatalı.', 'err');
+      if (n1.length < 8) return toast('Yeni şifre en az 8 karakter olmalı.', 'warn');
+      if (n1 !== n2) return toast('Yeni şifreler eşleşmiyor.', 'warn');
+      localStorage.setItem('portal_pass_hash', await sha256(n1));
+      ['curPassInput', 'newPassInput', 'newPassInput2'].forEach(i => $(i).value = '');
+      toast('Şifre güncellendi (bu cihazda geçerli).', 'ok');
+    }
+
+    /* =========================================================
+       BAŞLANGIÇ
+       ========================================================= */
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('scriptUrlInput').value = scriptUrl;
-      document.getElementById('portalPasswordInput').focus();
+      $('scriptUrlInput').value = scriptUrl;
+
+      let migrated = false;
+      notes.forEach(n => { if (!n.id) { n.id = genId(); migrated = true; } if (!n.tag) n.tag = 'Genel'; });
+      if (migrated) saveJson('user_notes', notes);
+
+      const lockUntil = parseInt(localStorage.getItem('lock_until') || '0', 10);
+      let wasUnlocked = false;
+      try { wasUnlocked = sessionStorage.getItem('portal_unlocked') === '1'; } catch (e) {}
+
+      if (wasUnlocked) {
+        unlockApp();
+      } else {
+        $('portalPasswordInput').focus();
+        if (lockUntil > Date.now()) startLockCountdown(lockUntil);
+      }
+
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNoteModal(); });
+      $('noteModal').addEventListener('click', e => { if (e.target.id === 'noteModal') closeNoteModal(); });
     });
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+    window.addEventListener('online', () => { if (appUnlocked) checkConnection(); });
 
     async function installAppPrompt() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('Kullanıcı uygulamayı yükledi.');
-        }
+        await deferredPrompt.userChoice;
         deferredPrompt = null;
       } else {
-        alert("Uygulamayı ana ekrana eklemek için:\n\n• iPhone (Safari): Tarayıcının alttaki 'Paylaş' (Share) butonuna basın ve ardından 'Ana Ekrana Ekle' seçeneğini seçin.\n• Android (Chrome): Sağ üstteki üç nokta menüsüne basın ve 'Ana Ekrana Ekle' veya 'Uygulama Yükle' seçeneğini seçin.");
+        alert("Uygulamayı ana ekrana eklemek için:\n\n• iPhone (Safari): Alttaki 'Paylaş' butonuna basın, ardından 'Ana Ekrana Ekle'yi seçin.\n• Android (Chrome): Sağ üstteki üç nokta menüsünden 'Ana Ekrana Ekle' veya 'Uygulamayı Yükle'yi seçin.");
       }
     }
 
-    // 🧠 KUSURSUZ NİYET AYRIŞTIRMALI YAPAY ZEKA MASTER MOTORU
-    function runAiMasterQuery(overrideText) {
-      const rawQuery = overrideText || document.getElementById('aiQueryInput').value.trim();
-      const chatBox = document.getElementById('aiChatOutput');
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.tab === tabId));
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      $(tabId + 'Section').classList.add('active');
+      if (tabId === 'dashboard') renderDashboard();
+      window.scrollTo(0, 0);
+    }
+    function isTabActive(tabId) { return $(tabId + 'Section').classList.contains('active'); }
 
-      if (!rawQuery) {
-        chatBox.innerHTML = "<b>⚠️ Lütfen asistanınıza ne aratmak istediğinizi cümle olarak yazın.</b>";
+    /* =========================================================
+       E-TABLO BAĞLANTISI & ÖNBELLEK
+       ========================================================= */
+    function setStatus(kind, text, sub) {
+      $('statusDot').className = 'dot' + (kind ? ' ' + kind : '');
+      $('statusText').innerText = text;
+      $('statusSub').innerText = sub || '';
+    }
+
+    function loadSheetCache() {
+      const cache = loadJson('sheet_cache', null);
+      if (cache && Array.isArray(cache.data)) {
+        rawSheetData = cache.data;
+        buildDateIndex();
+        populateSheetSelect();
+        const when = cache.ts ? new Date(cache.ts).toLocaleString('tr-TR') : '';
+        setStatus('cached', 'Önbellek (' + rawSheetData.length + ' Sayfa)', 'Son eşitleme: ' + when);
+      }
+    }
+    function clearSheetCache() {
+      localStorage.removeItem('sheet_cache');
+      toast('Önbellek temizlendi.', 'ok');
+    }
+
+    async function saveAndTestConnection() {
+      const url = $('scriptUrlInput').value.trim();
+      if (!/^https:\/\/script\.google\.com\/.+/.test(url)) return toast('Geçerli bir Apps Script (https://script.google.com/...) adresi girin.', 'warn');
+      scriptUrl = url;
+      localStorage.setItem('gas_script_url', scriptUrl);
+      await checkConnection(true);
+    }
+
+    let connecting = false;
+    async function checkConnection(manual) {
+      if (connecting) return;
+      connecting = true;
+      setStatus('', 'Bağlanıyor...', '');
+      let json = null, reason = '';
+
+      try {
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 25000);
+        let res;
+        try { res = await fetch(scriptUrl, { signal: ctrl.signal, redirect: 'follow' }); }
+        finally { clearTimeout(to); }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const txt = await res.text();
+        try { json = JSON.parse(txt); }
+        catch (e) {
+          reason = /accounts\.google|signin|Oturum|Sign in/i.test(txt)
+            ? 'Apps Script erişimi "Herkes" olarak ayarlı değil'
+            : (/<html|<!doctype/i.test(txt) ? 'Apps Script JSON yerine HTML hata sayfası döndürdü' : 'Yanıt JSON değil');
+        }
+        if (json && !(json.status === 'success' || json.data)) { reason = 'Yanıt beklenen formatta değil'; json = null; }
+      } catch (err) {
+        console.error(err);
+        if (err.name === 'AbortError') reason = 'Zaman aşımı (25 sn)';
+        else if (/HTTP/.test(err.message)) reason = 'Sunucu hatası: ' + err.message;
+        else reason = 'İstek engellendi veya ağa ulaşılamadı';
+      }
+
+      if (!json) {
+        if (rawSheetData) setStatus('cached', 'Çevrimdışı (önbellek)', reason);
+        else setStatus('', 'Bağlantı Hatası', reason);
+        if (manual) toast('Bağlantı kurulamadı: ' + reason, 'err');
+        connecting = false;
         return;
       }
 
-      const qLower = rawQuery.toLowerCase();
+      try {
+        rawSheetData = json.data;
+        saveJson('sheet_cache', { ts: Date.now(), data: rawSheetData });
+        buildDateIndex();
+        populateSheetSelect();
+        setStatus('connected', 'Bağlandı (' + rawSheetData.length + ' Sayfa)', 'Son eşitleme: ' + new Date().toLocaleTimeString('tr-TR'));
+        syncNotesFromSheet();
+        flushPendingNotes();
+        renderCalendar();
+        loadDateReport(selectedDateStr);
+        if (isTabActive('dashboard')) renderDashboard();
+        if (manual) toast('E-Tablo eşitlendi.', 'ok');
+      } catch (err) {
+        console.error(err);
+        setStatus('connected', 'Bağlandı, veri işlenemedi', String(err.message || err));
+        if (manual) toast('Veri işlenirken hata: ' + (err.message || err), 'err');
+      } finally {
+        connecting = false;
+      }
+    }
 
-      // 1. Kapsam Kilidi: Notlar mı isteniyor?
-      const isAskingForNotes = qLower.includes("not") || qLower.includes("notlar");
+    function buildDateIndex() {
+      dateIndex = new Map();
+      if (!rawSheetData) return;
+      rawSheetData.forEach((sheet, si) => {
+        if (lc(sheet.sheetName) === 'notlarim') return;
+        if (!sheet.rows || sheet.rows.length < 2) return;
+        for (let ri = 1; ri < sheet.rows.length; ri++) {
+          const row = sheet.rows[ri];
+          const seen = new Set();
+          for (let j = 0; j < row.length; j++) {
+            const k = cellToDateKey(row[j]);
+            if (k && !seen.has(k)) {
+              seen.add(k);
+              if (!dateIndex.has(k)) dateIndex.set(k, []);
+              dateIndex.get(k).push([si, ri]);
+            }
+          }
+        }
+      });
+    }
 
-      if (isAskingForNotes) {
-        let matchedNotes = notes.filter(n => {
-          const nText = (n.title + " " + n.body + " " + n.tag + " " + n.date).toLowerCase();
-          const words = qLower.split(/\s+/).filter(w => w.length > 2 && w !== "not" && w !== "notları" && w !== "göster" && w !== "ver");
-          if (words.length === 0) return true;
-          return words.some(w => nText.includes(w));
+    function populateSheetSelect() {
+      const sel = $('sheetSelect');
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">Tüm sayfalar (otomatik)</option>' +
+        (rawSheetData || []).filter(s => lc(s.sheetName) !== 'notlarim')
+          .map(s => `<option value="${esc(s.sheetName)}">${esc(s.sheetName)}</option>`).join('');
+      if (prev) sel.value = prev;
+    }
+
+    /* =========================================================
+       NOTLAR
+       ========================================================= */
+    function noteKey(n) { return lc(n.title) + '|' + n.date; }
+
+    function syncNotesFromSheet() {
+      if (!rawSheetData) return;
+      const sheet = rawSheetData.find(s => lc(s.sheetName) === 'notlarim');
+      if (!sheet || !sheet.rows || sheet.rows.length < 2) return;
+
+      const existing = new Set(notes.map(noteKey));
+      let added = 0;
+
+      for (let i = 1; i < sheet.rows.length; i++) {
+        const row = sheet.rows[i];
+        const date = cellToDateKey(row[0]) || (row[0] ? String(row[0]).trim() : getTodayStr());
+        const title = row[1] ? String(row[1]).trim() : '';
+        const body = row[2] ? String(row[2]).trim() : '';
+        const tag = row[3] ? String(row[3]).trim() : 'E-Tablo';
+        if (!title && !body) continue;
+
+        const n = { id: genId(), date, title: title || 'Başlıksız Not', body, tag, pinned: false };
+        if (!existing.has(noteKey(n))) {
+          existing.add(noteKey(n));
+          notes.unshift(n);
+          added++;
+        }
+      }
+      if (added > 0) {
+        saveJson('user_notes', notes);
+        renderTagFilters();
+        renderNotes();
+        toast(added + ' yeni not e-tablodan eklendi.', 'ok');
+      }
+    }
+
+    function openNoteModal(dateStr, noteId) {
+      editingNoteId = noteId || null;
+      const n = noteId ? notes.find(x => x.id === noteId) : null;
+      $('noteModalTitle').innerText = n ? 'Notu Düzenle' : 'Yeni Not Ekle';
+      $('saveNoteBtn').innerHTML = n
+        ? '<i class="fa-solid fa-floppy-disk"></i> Güncelle'
+        : '<i class="fa-solid fa-cloud-arrow-up"></i> Kaydet & Gönder';
+
+      let isoDate;
+      const src = n ? n.date : (typeof dateStr === 'string' ? dateStr : null);
+      if (src && /^\d{2}\.\d{2}\.\d{4}$/.test(src)) {
+        const [d, m, y] = src.split('.');
+        isoDate = `${y}-${m}-${d}`;
+      } else {
+        const t = new Date();
+        isoDate = `${t.getFullYear()}-${p2(t.getMonth() + 1)}-${p2(t.getDate())}`;
+      }
+      $('newNoteDateInput').value = isoDate;
+      $('newNoteTitleInput').value = n ? n.title : '';
+      $('newNoteBodyInput').value = n ? n.body : '';
+      const tagSel = $('newNoteTagInput');
+      if (n && ![...tagSel.options].some(o => o.value === n.tag)) {
+        const o = document.createElement('option'); o.value = n.tag; o.textContent = n.tag; tagSel.appendChild(o);
+      }
+      tagSel.value = n ? n.tag : 'Kişisel';
+      $('noteModal').style.display = 'flex';
+      setTimeout(() => $('newNoteTitleInput').focus(), 50);
+    }
+
+    function closeNoteModal() {
+      if (isNoteListening && noteRecognition) { try { noteRecognition.stop(); } catch (e) {} }
+      stopNoteVoice();
+      editingNoteId = null;
+      $('noteModal').style.display = 'none';
+    }
+
+    async function postNote(note) {
+      if (!scriptUrl) return false;
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date: note.date, title: note.title, body: note.body, tag: note.tag })
         });
+        return true;
+      } catch (e) { return false; }
+    }
 
-        if (matchedNotes.length === 0) {
-          lastAiResponseText = `Aradığınız kritere uygun kayıtlı herhangi bir not bulunamadı, Umut Bey.`;
-          chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${lastAiResponseText}`;
+    async function flushPendingNotes() {
+      if (!pendingNotes.length || !navigator.onLine) return;
+      const remaining = [];
+      for (const n of pendingNotes) {
+        const ok = await postNote(n);
+        if (!ok) remaining.push(n);
+      }
+      const sent = pendingNotes.length - remaining.length;
+      pendingNotes = remaining;
+      saveJson('pending_notes', pendingNotes);
+      if (sent > 0) toast(sent + ' bekleyen not e-tabloya gönderildi.', 'ok');
+    }
+
+    async function saveNewNote() {
+      const rawDate = $('newNoteDateInput').value;
+      const title = $('newNoteTitleInput').value.trim();
+      const tag = $('newNoteTagInput').value;
+      const body = $('newNoteBodyInput').value.trim();
+      if (!title || !body) return toast('Lütfen başlık ve içeriği doldurun.', 'warn');
+
+      let date = getTodayStr();
+      if (rawDate) { const [y, m, d] = rawDate.split('-'); date = `${d}.${m}.${y}`; }
+
+      if (editingNoteId) {
+        const n = notes.find(x => x.id === editingNoteId);
+        if (n) { n.title = title; n.body = body; n.tag = tag; n.date = date; }
+        saveJson('user_notes', notes);
+        closeNoteModal();
+        refreshAfterNoteChange();
+        toast('Not güncellendi.', 'ok');
+        return;
+      }
+
+      const note = { id: genId(), title, body, tag, date, pinned: false };
+      notes.unshift(note);
+      saveJson('user_notes', notes);
+      closeNoteModal();
+      refreshAfterNoteChange();
+
+      const ok = navigator.onLine ? await postNote(note) : false;
+      if (ok) toast('Not kaydedildi ve e-tabloya gönderildi.', 'ok');
+      else {
+        pendingNotes.push(note);
+        saveJson('pending_notes', pendingNotes);
+        toast('Not kaydedildi. İnternet gelince e-tabloya gönderilecek.', 'warn');
+      }
+    }
+
+    function refreshAfterNoteChange() {
+      renderTagFilters();
+      renderNotes();
+      renderCalendar();
+      loadDateReport(selectedDateStr);
+      if (isTabActive('dashboard')) renderDashboard();
+    }
+
+    function deleteNote(id) {
+      if (!confirm('Bu notu silmek istediğinize emin misiniz?')) return;
+      notes = notes.filter(n => n.id !== id);
+      saveJson('user_notes', notes);
+      saveJson('pending_notes', pendingNotes);
+      refreshAfterNoteChange();
+      toast('Not silindi.', 'ok');
+    }
+
+    function togglePin(id) {
+      const n = notes.find(x => x.id === id);
+      if (!n) return;
+      n.pinned = !n.pinned;
+      saveJson('user_notes', notes);
+      renderNotes();
+    }
+
+    function renderTagFilters() {
+      const tags = [...new Set(notes.map(n => n.tag || 'Genel'))];
+      const row = $('tagFilterRow');
+      if (!tags.length) { row.innerHTML = ''; return; }
+      row.innerHTML = `<span class="chip tag-chip ${activeTagFilter === '' ? 'active' : ''}" data-tag="">Tümü (${notes.length})</span>` +
+        tags.map(t => `<span class="chip tag-chip ${activeTagFilter === t ? 'active' : ''}" data-tag="${esc(t)}">${esc(t)} (${notes.filter(n => (n.tag || 'Genel') === t).length})</span>`).join('');
+      row.querySelectorAll('.chip').forEach(c => c.onclick = () => {
+        activeTagFilter = c.dataset.tag;
+        renderTagFilters();
+        renderNotes();
+      });
+    }
+
+    function renderNotes() {
+      const grid = $('notesGrid');
+      const q = fold($('noteSearchInput').value || '');
+      let filtered = notes.filter(n => {
+        if (activeTagFilter && (n.tag || 'Genel') !== activeTagFilter) return false;
+        if (!q) return true;
+        return fold(n.title + ' ' + n.body + ' ' + n.tag + ' ' + n.date).includes(q);
+      });
+      filtered = filtered.map((n, i) => ({ n, i })).sort((a, b) => (b.n.pinned ? 1 : 0) - (a.n.pinned ? 1 : 0) || a.i - b.i).map(x => x.n);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state">${notes.length ? 'Aramanıza uyan not bulunamadı.' : 'Henüz kaydedilmiş not bulunmuyor.'}</div>`;
+        return;
+      }
+      grid.innerHTML = filtered.map(n => `
+        <div class="card note-card ${n.pinned ? 'pinned' : ''}">
+          <div>
+            <div class="note-header">
+              <span class="note-tag">${esc(n.tag || 'Genel')}</span>
+              <div class="note-actions">
+                <i class="fa-solid fa-thumbtack ${n.pinned ? 'pin-on' : ''}" title="Sabitle" onclick="togglePin('${n.id}')"></i>
+                <i class="fa-solid fa-pen" title="Düzenle" onclick="openNoteModal(null,'${n.id}')"></i>
+                <i class="fa-solid fa-trash del" title="Sil" onclick="deleteNote('${n.id}')"></i>
+              </div>
+            </div>
+            <div class="note-title">${esc(n.title)}</div>
+            <div class="note-body">${esc(n.body)}</div>
+          </div>
+          <div class="note-footer">
+            <span><i class="fa-solid fa-calendar"></i> ${esc(n.date)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function exportNotes() {
+      const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), notes }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'notlar-yedek-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      toast('Yedek indirildi.', 'ok');
+    }
+
+    function importNotes(ev) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const list = Array.isArray(data) ? data : data.notes;
+          if (!Array.isArray(list)) throw new Error('format');
+          const existing = new Set(notes.map(noteKey));
+          let added = 0;
+          list.forEach(n => {
+            if (!n || (!n.title && !n.body)) return;
+            const item = { id: genId(), title: String(n.title || 'Başlıksız Not'), body: String(n.body || ''), tag: String(n.tag || 'Genel'), date: String(n.date || getTodayStr()), pinned: !!n.pinned };
+            if (!existing.has(noteKey(item))) { existing.add(noteKey(item)); notes.push(item); added++; }
+          });
+          saveJson('user_notes', notes);
+          refreshAfterNoteChange();
+          toast(added + ' not yüklendi.', 'ok');
+        } catch (e) { toast('Yedek dosyası okunamadı.', 'err'); }
+        ev.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    /* =========================================================
+       🧠 YAPAY ZEKA ASİSTAN
+       ========================================================= */
+    function renderAiHistory() {
+      const row = $('aiHistoryChips');
+      if (!aiHistory.length) { row.innerHTML = ''; return; }
+      row.innerHTML = aiHistory.map(q => `<span class="chip" data-q="${esc(q)}"><i class="fa-solid fa-clock-rotate-left"></i> ${esc(q)}</span>`).join('');
+      row.querySelectorAll('.chip').forEach(c => c.onclick = () => { $('aiQueryInput').value = c.dataset.q; runAiMasterQuery(); });
+    }
+    function pushAiHistory(q) {
+      aiHistory = [q, ...aiHistory.filter(x => x !== q)].slice(0, 6);
+      saveJson('ai_history', aiHistory);
+      renderAiHistory();
+    }
+
+    function runAiMasterQuery(overrideText) {
+      const rawQuery = (typeof overrideText === 'string' ? overrideText : $('aiQueryInput').value).trim();
+      const chatBox = $('aiChatOutput');
+
+      if (!rawQuery) { chatBox.innerHTML = '<b>⚠️ Lütfen asistanınıza ne aratmak istediğinizi yazın.</b>'; return; }
+      pushAiHistory(rawQuery);
+
+      const q = fold(rawQuery).replace(/[.,\/#!$%\^&*;:{}=\-_`~()?"'\[\]]/g, ' ');
+      const tokens = q.split(/\s+/).filter(Boolean);
+
+      const asksNotes = tokens.some(t => t.startsWith('not'));
+      if (asksNotes) {
+        const noteStop = ['goster', 'ver', 'getir', 'bana', 'listele', 'bul', 'olan', 'icin', 'ile', 'bir'];
+        const words = tokens.filter(w => w.length > 2 && !w.startsWith('not') && !noteStop.includes(w));
+
+        let scored = notes.map(n => {
+          const text = fold(n.title + ' ' + n.body + ' ' + n.tag + ' ' + n.date);
+          const score = words.reduce((s, w) => s + (text.includes(w) ? 1 : 0), 0);
+          return { n, score };
+        }).filter(x => words.length === 0 || x.score > 0).sort((a, b) => b.score - a.score);
+
+        if (!scored.length) {
+          lastAiResponseText = 'Aradığınız kritere uygun kayıtlı herhangi bir not bulunamadı, Umut Bey.';
+          chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${esc(lastAiResponseText)}`;
           return;
         }
-
-        let html = `<b>🤖 AI Asistan Eşleşen Notlar:</b><br><br>`;
-        let speech = `Bulunan notlar: `;
-
-        matchedNotes.forEach((n) => {
+        let html = `<b>🤖 AI Asistan — ${scored.length} not bulundu:</b><br><br>`;
+        let speech = 'Bulunan notlar: ';
+        scored.slice(0, 10).forEach(({ n }) => {
           html += `
             <div class="pinpoint-result-card">
-              <div class="pinpoint-header"><span><i class="fa-solid fa-sticky-note"></i> ${n.title} (${n.date}) - [${n.tag}]</span></div>
-              <div style="font-size:13.5px; color:var(--text-main); margin-top:4px;">${n.body}</div>
-            </div>
-          `;
+              <div class="pinpoint-header"><span><i class="fa-solid fa-sticky-note"></i> ${esc(n.title)} (${esc(n.date)}) - [${esc(n.tag)}]</span></div>
+              <div style="font-size:13.5px; margin-top:4px; white-space:pre-wrap;">${esc(n.body)}</div>
+            </div>`;
           speech += `Başlık ${n.title}. İçerik ${n.body}. `;
         });
-
+        if (scored.length > 10) html += `<div style="font-size:12px;color:var(--text-muted);">İlk 10 not gösteriliyor.</div>`;
         lastAiResponseText = speech;
         chatBox.innerHTML = html;
         return;
       }
 
-      // 2. E-Tablo Veri Sorgulama Modülü
-      if (!rawSheetData) {
-        chatBox.innerHTML = "<b>⚠️ E-Tablo verileri henüz yüklenmedi. Lütfen sol alttan eşitleyin.</b>";
-        return;
-      }
+      if (!rawSheetData) { chatBox.innerHTML = '<b>⚠️ E-Tablo verileri henüz yüklenmedi. "E-Tablodan Eşitle" butonuna basın.</b>'; return; }
 
-      const stopWords = ["nedir", "kaç", "göster", "bana", "için", "olan", "nasıl", "ne", "ile", "ve", "de", "da", "bir", "bu", "şu", "olarak", "ver", "getir", "sonucu", "sonuçları"];
-      const cleanText = qLower.replace(/[.,\/\/#!$%\^&\*;:{}=\-_`~()?"'üĞŞİÖÇüğşioç]/g, " ");
-      const queryTokens = cleanText.split(/\s+/).filter(t => t.length > 1 && !stopWords.includes(t));
+      const stopWords = ['nedir', 'kac', 'goster', 'bana', 'icin', 'olan', 'nasil', 'ne', 'ile', 've', 'de', 'da', 'bir', 'bu', 'su', 'olarak', 'ver', 'getir', 'sonucu', 'sonuclari', 'bul', 'listele'];
+      const queryTokens = tokens.filter(t => t.length > 1 && !stopWords.includes(t));
+      if (!queryTokens.length) { chatBox.innerHTML = '<b>⚠️ Lütfen daha net bir arama terimi belirtin.</b>'; return; }
 
-      if (queryTokens.length === 0) {
-        chatBox.innerHTML = "<b>⚠️ Lütfen daha net bir arama terimi belirtin.</b>";
-        return;
-      }
-
-      let bestMatches = [];
-
+      const matches = [];
       rawSheetData.forEach(sheet => {
-        const sheetNameLower = sheet.sheetName.toLowerCase();
-        const isTargetSheet = queryTokens.some(token => sheetNameLower.includes(token));
-
-        if (sheet.rows && sheet.rows.length > 1) {
-          const headers = sheet.rows[0];
-          for (let i = 1; i < sheet.rows.length; i++) {
-            const row = sheet.rows[i];
-            const rowString = row.join(" ").toLowerCase();
-
-            let matchScore = 0;
-            queryTokens.forEach(token => {
-              if (rowString.includes(token)) {
-                matchScore += 1;
-                row.forEach(cell => {
-                  if (cell && String(cell).toLowerCase().includes(token)) matchScore += 1.5;
-                });
-              }
-            });
-
-            if (matchScore > 0) {
-              bestMatches.push({
-                sheetName: sheet.sheetName,
-                headers: headers,
-                row: row,
-                score: matchScore + (isTargetSheet ? 5 : 0)
-              });
+        if (lc(sheet.sheetName) === 'notlarim') return;
+        const sheetFold = fold(sheet.sheetName);
+        const isTargetSheet = queryTokens.some(t => sheetFold.includes(t));
+        if (!sheet.rows || sheet.rows.length < 2) return;
+        const headers = sheet.rows[0];
+        for (let i = 1; i < sheet.rows.length; i++) {
+          const row = sheet.rows[i];
+          const cells = row.map(c => fold(displayCell(c)));
+          const rowString = cells.join(' ');
+          let score = 0, hit = 0;
+          queryTokens.forEach(t => {
+            if (rowString.includes(t)) {
+              hit++; score += 1;
+              cells.forEach(c => { if (c.includes(t)) score += 1.5; });
             }
-          }
+          });
+          if (hit > 0) matches.push({ sheetName: sheet.sheetName, headers, row, score: score + hit * 3 + (isTargetSheet ? 5 : 0), hit });
         }
       });
+      matches.sort((a, b) => b.score - a.score);
 
-      bestMatches.sort((a, b) => b.score - a.score);
-
-      if (bestMatches.length === 0) {
+      if (!matches.length) {
         lastAiResponseText = `"${rawQuery}" talebinizle eşleşen bir e-tablo kaydı bulunamadı.`;
-        chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${lastAiResponseText}`;
+        chatBox.innerHTML = `<b>🤖 AI Asistan Yanıtı:</b><br>❌ ${esc(lastAiResponseText)}`;
         return;
       }
 
-      let htmlOutput = `<b>🤖 AI Asistan Nokta Atışı Sentezi ("${rawQuery}"):</b><br><br>`;
-      let speechSummary = `Sorgunuz için bulduğum en net sonuç: `;
-
-      bestMatches.slice(0, 1).forEach((match) => {
-        htmlOutput += `
-          <div class="pinpoint-result-card">
-            <div class="pinpoint-header">
-              <span><i class="fa-solid fa-file-excel"></i> ${match.sheetName} (Nokta Atışı Eşleşme)</span>
-            </div>
-            <div class="pinpoint-grid">
-        `;
-        match.headers.forEach((h, idx) => {
-          const val = match.row[idx];
-          if (val !== undefined && val !== null && String(val).trim() !== "") {
-            htmlOutput += `
-              <div class="pinpoint-item">
-                <span class="pinpoint-label">${h}</span>
-                <span class="pinpoint-val">${val}</span>
-              </div>
-            `;
-            speechSummary += `${h} ${val}. `;
+      const top = matches.slice(0, 3);
+      let html = `<b>🤖 AI Asistan — "${esc(rawQuery)}" için ${matches.length} eşleşme (en iyi ${top.length}):</b><br><br>`;
+      let speech = 'Sorgunuz için bulduğum en net sonuç: ';
+      top.forEach((m, idx) => {
+        html += `<div class="pinpoint-result-card"><div class="pinpoint-header"><span><i class="fa-solid fa-file-excel"></i> ${esc(m.sheetName)} ${idx === 0 ? '(En iyi eşleşme)' : '(#' + (idx + 1) + ')'}</span><span>${m.hit}/${queryTokens.length} kelime</span></div><div class="pinpoint-grid">`;
+        m.headers.forEach((h, k) => {
+          const val = displayCell(m.row[k]);
+          if (val.trim() !== '') {
+            html += `<div class="pinpoint-item"><span class="pinpoint-label">${esc(h)}</span><span class="pinpoint-val">${esc(val)}</span></div>`;
+            if (idx === 0) speech += `${h} ${val}. `;
           }
         });
-        htmlOutput += `</div></div>`;
+        html += '</div></div>';
       });
-
-      lastAiResponseText = speechSummary;
-      chatBox.innerHTML = htmlOutput;
+      if (matches.length > 3) html += `<div style="font-size:12px;color:var(--text-muted);">Tüm eşleşmeleri tablo olarak görmek için <b>Analiz</b> sekmesini kullanın.</div>`;
+      lastAiResponseText = speech;
+      chatBox.innerHTML = html;
     }
 
-    // Sesli Okuma
     function speakLastAiAnswer() {
-      if (!lastAiResponseText) {
-        alert("Okunacak bir asistan yanıtı bulunmuyor.");
-        return;
-      }
+      if (!lastAiResponseText) return toast('Okunacak bir asistan yanıtı yok.', 'warn');
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(lastAiResponseText);
-        utterance.lang = 'tr-TR';
-        window.speechSynthesis.speak(utterance);
-      } else {
-        alert("Tarayıcınız sesli okuma özelliğini desteklemiyor.");
-      }
+        const u = new SpeechSynthesisUtterance(lastAiResponseText);
+        u.lang = 'tr-TR';
+        window.speechSynthesis.speak(u);
+      } else toast('Tarayıcınız sesli okumayı desteklemiyor.', 'err');
     }
 
-    // Sesli Komut
-    let aiRecognition = null;
-    let isAiListening = false;
-
+    let aiRecognition = null, isAiListening = false;
     function toggleAiVoiceInput() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Tarayıcınız sesli komut özelliğini desteklemiyor.");
-        return;
-      }
-
-      const aiVoiceBtn = document.getElementById('aiVoiceBtn');
-      const aiInput = document.getElementById('aiQueryInput');
-
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) return toast('Tarayıcınız sesli komutu desteklemiyor.', 'err');
+      const btn = $('aiVoiceBtn');
       if (!isAiListening) {
-        aiRecognition = new SpeechRecognition();
+        aiRecognition = new SR();
         aiRecognition.lang = 'tr-TR';
         aiRecognition.continuous = false;
         aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = () => {
-          isAiListening = true;
-          aiVoiceBtn.className = "btn btn-danger";
-          aiVoiceBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...';
-        };
-
-        aiRecognition.onresult = (event) => {
-          const spokenText = event.results[0][0].transcript;
-          aiInput.value = spokenText;
-          runAiMasterQuery(spokenText);
-        };
-
-        aiRecognition.onerror = () => { stopAiVoice(); };
-        aiRecognition.onend = () => { stopAiVoice(); };
-
+        aiRecognition.onstart = () => { isAiListening = true; btn.className = 'btn btn-danger btn-sm'; btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...'; };
+        aiRecognition.onresult = (e) => { const t = e.results[0][0].transcript; $('aiQueryInput').value = t; runAiMasterQuery(t); };
+        aiRecognition.onerror = stopAiVoice;
+        aiRecognition.onend = stopAiVoice;
         aiRecognition.start();
-      } else {
-        if (aiRecognition) aiRecognition.stop();
-        stopAiVoice();
-      }
+      } else { try { aiRecognition.stop(); } catch (e) {} stopAiVoice(); }
     }
-
     function stopAiVoice() {
       isAiListening = false;
-      const aiVoiceBtn = document.getElementById('aiVoiceBtn');
-      if (aiVoiceBtn) {
-        aiVoiceBtn.className = "btn btn-secondary";
-        aiVoiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Sor';
-      }
+      const btn = $('aiVoiceBtn');
+      if (btn) { btn.className = 'btn btn-secondary btn-sm'; btn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Sor'; }
     }
 
-    // Notlar için Sesli Dikte
-    let noteRecognition = null;
-    let isNoteListening = false;
-
+    let noteRecognition = null, isNoteListening = false, dictationBase = '';
     function toggleSpeechRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Tarayıcınız sesli dikte özelliğini desteklemiyor.");
-        return;
-      }
-
-      const voiceBtn = document.getElementById('voiceBtn');
-      const bodyInput = document.getElementById('newNoteBodyInput');
-
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) return toast('Tarayıcınız sesli dikteyi desteklemiyor.', 'err');
+      const btn = $('voiceBtn'), body = $('newNoteBodyInput');
       if (!isNoteListening) {
-        noteRecognition = new SpeechRecognition();
+        dictationBase = body.value ? body.value.trimEnd() + ' ' : '';
+        noteRecognition = new SR();
         noteRecognition.lang = 'tr-TR';
         noteRecognition.continuous = true;
         noteRecognition.interimResults = true;
-
-        noteRecognition.onstart = () => {
-          isNoteListening = true;
-          voiceBtn.className = "btn btn-danger";
-          voiceBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...';
+        noteRecognition.onstart = () => { isNoteListening = true; btn.className = 'btn btn-danger btn-sm'; btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Dinleniyor...'; };
+        noteRecognition.onresult = (e) => {
+          let t = '';
+          for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+          body.value = dictationBase + t;
         };
-
-        noteRecognition.onresult = (event) => {
-          let transcript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript;
-          }
-          bodyInput.value = transcript;
-        };
-
-        noteRecognition.onerror = () => { stopNoteVoice(); };
-        noteRecognition.onend = () => { stopNoteVoice(); };
-
+        noteRecognition.onerror = stopNoteVoice;
+        noteRecognition.onend = stopNoteVoice;
         noteRecognition.start();
-      } else {
-        if (noteRecognition) noteRecognition.stop();
-        stopNoteVoice();
-      }
+      } else { try { noteRecognition.stop(); } catch (e) {} stopNoteVoice(); }
     }
-
     function stopNoteVoice() {
       isNoteListening = false;
-      const voiceBtn = document.getElementById('voiceBtn');
-      if (voiceBtn) {
-        voiceBtn.className = "btn btn-primary";
-        voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Yaz';
-      }
+      const btn = $('voiceBtn');
+      if (btn) { btn.className = 'btn btn-primary btn-sm'; btn.innerHTML = '<i class="fa-solid fa-microphone"></i> Sesle Yaz'; }
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-      
-      event.currentTarget.classList.add('active');
-      document.getElementById(tabId + 'Section').classList.add('active');
-    }
-
-    async function saveAndTestConnection() {
-      const url = document.getElementById('scriptUrlInput').value.trim();
-      if (!url) return alert('Lütfen geçerli bir URL girin.');
-
-      scriptUrl = url;
-      localStorage.setItem('gas_script_url', scriptUrl);
-      await checkConnection();
-    }
-
-    async function checkConnection() {
-      const dot = document.getElementById('statusDot');
-      const text = document.getElementById('statusText');
-      
-      text.innerText = "Bağlanıyor...";
-      dot.className = "dot";
-
-      try {
-        const res = await fetch(scriptUrl);
-        const json = await res.json();
-        
-        if (json.status === 'success' || json.data) {
-          rawSheetData = json.data;
-          dot.className = "dot connected";
-          text.innerText = "Bağlandı (" + rawSheetData.length + " Sayfa)";
-
-          syncNotesFromSheet();
-          loadDateReport(selectedDateStr);
-        } else {
-          throw new Error('Veri formatı uyuşmuyor');
-        }
-      } catch (err) {
-        dot.className = "dot";
-        text.innerText = "Bağlantı Hatası";
-        console.error(err);
-      }
-    }
-
-    function syncNotesFromSheet() {
-      if (!rawSheetData) return;
-      
-      const notlarimSheet = rawSheetData.find(s => s.sheetName.toLowerCase() === "notlarim");
-      if (!notlarimSheet || !notlarimSheet.rows || notlarimSheet.rows.length < 2) return;
-
-      const rows = notlarimSheet.rows;
-      let addedCount = 0;
-
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        const rowDate = row[0] ? String(row[0]).trim() : todayStr;
-        const rowTitle = row[1] ? String(row[1]).trim() : '';
-        const rowBody = row[2] ? String(row[2]).trim() : '';
-        const rowTag = row[3] ? String(row[3]).trim() : 'E-Tablo';
-
-        if (rowTitle || rowBody) {
-          const exists = notes.some(n => n.title.toLowerCase() === rowTitle.toLowerCase() && n.date === rowDate);
-
-          if (!exists) {
-            notes.unshift({
-              date: rowDate,
-              title: rowTitle || 'Başlıksız Not',
-              body: rowBody,
-              tag: rowTag
-            });
-            addedCount++;
-          }
-        }
-      }
-
-      if (addedCount > 0) {
-        localStorage.setItem('user_notes', JSON.stringify(notes));
-        renderNotes();
-        renderCalendar();
-        loadDateReport(selectedDateStr);
-      }
-    }
-
-    function openNoteModal() {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('newNoteDateInput').value = today;
-      document.getElementById('newNoteTitleInput').value = '';
-      document.getElementById('newNoteBodyInput').value = '';
-      document.getElementById('noteModal').style.display = 'flex';
-    }
-
-    function closeNoteModal() {
-      if (isNoteListening && noteRecognition) { noteRecognition.stop(); }
-      stopNoteVoice();
-      document.getElementById('noteModal').style.display = 'none';
-    }
-
-    async function saveNewNote() {
-      const rawDate = document.getElementById('newNoteDateInput').value;
-      const title = document.getElementById('newNoteTitleInput').value.trim();
-      const tag = document.getElementById('newNoteTagInput').value;
-      const body = document.getElementById('newNoteBodyInput').value.trim();
-
-      if (!title || !body) return alert("Lütfen başlık ve içeriği doldurun.");
-
-      let formattedDate = todayStr;
-      if (rawDate) {
-        const parts = rawDate.split('-');
-        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-      }
-
-      const newNoteObj = { title, body, tag, date: formattedDate };
-
-      notes.unshift(newNoteObj);
-      localStorage.setItem('user_notes', JSON.stringify(notes));
-
-      if (scriptUrl) {
-        try {
-          fetch(scriptUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newNoteObj)
-          });
-        } catch (e) { console.error("Sync error:", e); }
-      }
-
-      closeNoteModal();
-      renderNotes();
-      renderCalendar();
-      loadDateReport(selectedDateStr);
-    }
-
-    function renderNotes() {
-      const grid = document.getElementById('notesGrid');
-      const filter = document.getElementById('noteSearchInput')?.value.toLowerCase() || '';
-      const filtered = notes.filter(n => n.title.toLowerCase().includes(filter) || n.body.toLowerCase().includes(filter));
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div style="color: var(--text-muted);">Henüz kaydedilmiş not bulunmuyor.</div>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map((n, i) => `
-        <div class="card note-card">
-          <div>
-            <div class="note-header">
-              <span class="note-tag">${n.tag || 'Genel'}</span>
-              <i class="fa-solid fa-trash" style="cursor:pointer; color:var(--accent-rose);" onclick="deleteNote(${i})"></i>
-            </div>
-            <div class="note-title">${n.title}</div>
-            <div class="note-body">${n.body}</div>
-          </div>
-          <div class="note-footer">
-            <span><i class="fa-solid fa-calendar"></i> ${n.date}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function deleteNote(index) {
-      if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
-        notes.splice(index, 1);
-        localStorage.setItem('user_notes', JSON.stringify(notes));
-        renderNotes();
-        renderCalendar();
-        loadDateReport(selectedDateStr);
-      }
-    }
-
+    /* =========================================================
+       TAKVİM & GÜNLÜK RAPOR
+       ========================================================= */
     function renderCalendar() {
-      const grid = document.getElementById('calDaysGrid');
-      const monthYearTitle = document.getElementById('calMonthYear');
-
+      const grid = $('calDaysGrid');
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
-
-      const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-      monthYearTitle.innerText = `${monthNames[month]} ${year}`;
-
+      const names = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+      $('calMonthYear').innerText = `${names[month]} ${year}`;
       grid.innerHTML = '';
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const startingDay = firstDay === 0 ? 6 : firstDay - 1;
+      const first = new Date(year, month, 1).getDay();
+      const startingDay = first === 0 ? 6 : first - 1;
       const totalDays = new Date(year, month + 1, 0).getDate();
+      const noteDates = new Set(notes.map(n => n.date));
+      const today = getTodayStr();
 
-      for (let i = 0; i < startingDay; i++) {
-        grid.appendChild(document.createElement('div'));
-      }
+      for (let i = 0; i < startingDay; i++) grid.appendChild(document.createElement('div'));
 
       for (let day = 1; day <= totalDays; day++) {
-        const dayEl = document.createElement('div');
-        dayEl.className = 'cal-day';
-        dayEl.innerText = day;
-
-        const formattedDate = `${String(day).padStart(2, '0')}.${String(month + 1).padStart(2, '0')}.${year}`;
-
-        if (formattedDate === todayStr) {
-          dayEl.classList.add('today');
-        }
-
-        if (selectedDateStr === formattedDate) {
-          dayEl.classList.add('selected');
-        }
-
-        dayEl.onclick = () => {
-          document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-          dayEl.classList.add('selected');
-          selectedDateStr = formattedDate;
-          loadDateReport(formattedDate);
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.innerText = day;
+        const key = `${p2(day)}.${p2(month + 1)}.${year}`;
+        if (key === today) el.classList.add('today');
+        if (key === selectedDateStr) el.classList.add('selected');
+        if (noteDates.has(key)) el.classList.add('has-note');
+        if (dateIndex.has(key)) el.classList.add('has-data');
+        el.onclick = () => {
+          grid.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+          el.classList.add('selected');
+          selectedDateStr = key;
+          loadDateReport(key);
         };
-
-        grid.appendChild(dayEl);
+        grid.appendChild(el);
       }
     }
 
     function changeMonth(delta) {
-      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+      currentCalDate = new Date(currentCalDate.getFullYear(), currentCalDate.getMonth() + delta, 1);
       renderCalendar();
     }
+    function goToday() {
+      currentCalDate = new Date();
+      selectedDateStr = getTodayStr();
+      renderCalendar();
+      loadDateReport(selectedDateStr);
+    }
 
-    function renderSheetsToContainer(sheetsArray, containerId, totalCountId) {
-      const container = document.getElementById(containerId);
-
+    function renderSheetsToContainer(sheetsArray, containerId, countId) {
+      const container = $(containerId);
       if (!rawSheetData) {
-        container.innerHTML = `<div style="color:#64748b; text-align:center; padding:12px;">E-Tablo verisi bekleniyor...</div>`;
-        document.getElementById(totalCountId).innerText = "0";
+        container.innerHTML = '<div style="color:#64748b; text-align:center; padding:12px;">E-Tablo verisi bekleniyor...</div>';
+        $(countId).innerText = '0';
         return;
       }
+      let total = 0;
+      sheetsArray.forEach(s => total += s.rows.length);
+      $(countId).innerText = total;
 
-      let totalMatchedRowsCount = 0;
-      sheetsArray.forEach(s => totalMatchedRowsCount += s.rows.length);
-      document.getElementById(totalCountId).innerText = totalMatchedRowsCount;
-
-      if (sheetsArray.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color:#64748b; padding:16px; font-size:13px;">Kayıt bulunamadı.</div>`;
+      if (!sheetsArray.length) {
+        container.innerHTML = '<div style="text-align:center; color:#64748b; padding:16px; font-size:13px;">Kayıt bulunamadı.</div>';
         return;
       }
-
-      container.innerHTML = sheetsArray.map(s => `
+      container.innerHTML = sheetsArray.map(s => {
+        const shown = s.rows.slice(0, MAX_ROWS_RENDER);
+        const over = s.rows.length - shown.length;
+        return `
         <div class="sub-sheet-container">
-          <div class="sub-sheet-title">
-            <i class="fa-solid fa-file-excel"></i> ${s.sheetName} (${s.rows.length} Kayıt)
-          </div>
-          
+          <div class="sub-sheet-title"><i class="fa-solid fa-file-excel"></i> ${esc(s.sheetName)} (${s.rows.length} Kayıt)</div>
           <div class="table-wrapper desktop-table-view">
             <table class="report-table">
-              <thead>
-                <tr>
-                  ${s.headers.map(h => `<th>${h}</th>`).join('')}
-                </tr>
-              </thead>
-              <tbody>
-                ${s.rows.map(row => `
-                  <tr>
-                    ${row.map(cell => `<td>${cell !== null && cell !== undefined ? cell : ''}</td>`).join('')}
-                  </tr>
-                `).join('')}
-              </tbody>
+              <thead><tr>${s.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+              <tbody>${shown.map(row => `<tr>${s.headers.map((_, k) => `<td>${esc(displayCell(row[k]))}</td>`).join('')}</tr>`).join('')}</tbody>
             </table>
           </div>
-
-          <div style="padding: 8px;">
-            ${s.rows.map(row => `
+          <div class="mobile-list">
+            ${shown.map(row => `
               <div class="mobile-card-item">
-                ${s.headers.map((h, idx) => `
+                ${s.headers.map((h, k) => `
                   <div class="mobile-card-row">
-                    <span class="mobile-card-label">${h}:</span>
-                    <span class="mobile-card-val">${row[idx] !== null && row[idx] !== undefined ? row[idx] : ''}</span>
-                  </div>
-                `).join('')}
-              </div>
-            `).join('')}
+                    <span class="mobile-card-label">${esc(h)}:</span>
+                    <span class="mobile-card-val">${esc(displayCell(row[k]))}</span>
+                  </div>`).join('')}
+              </div>`).join('')}
           </div>
-        </div>
-      `).join('');
+          ${over > 0 ? `<div class="report-note">İlk ${MAX_ROWS_RENDER} satır gösteriliyor, ${over} satır daha var.</div>` : ''}
+        </div>`;
+      }).join('');
     }
 
     function loadDateReport(dateStr) {
-      const isToday = dateStr === todayStr;
-      document.getElementById('dailyRptDateStr').innerText = `Rapor Tarihi: ${dateStr} ${isToday ? '(BUGÜN)' : ''}`;
+      const isToday = dateStr === getTodayStr();
+      $('dailyRptDateStr').innerText = `Rapor Tarihi: ${dateStr} ${isToday ? '(BUGÜN)' : ''}`;
 
       const dayNotes = notes.filter(n => n.date === dateStr);
-      const notesContainer = document.getElementById('dayNotesContainer');
-      document.getElementById('rptNoteCount').innerText = dayNotes.length;
-
-      if (dayNotes.length === 0) {
-        notesContainer.innerHTML = `<i style="color:#64748b; font-size:13px;">Bu tarihe ait kaydedilmiş not bulunmamaktadır.</i>`;
-      } else {
-        notesContainer.innerHTML = dayNotes.map(n => `
-          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin-bottom:8px; color:#1e293b; border-left: 4px solid #3b82f6;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <b style="font-size:14px;">${n.title}</b> 
-              <span style="font-size:11px; background:#3b82f6; color:white; padding:2px 8px; border-radius:10px; font-weight:700;">${n.tag}</span>
+      $('rptNoteCount').innerText = dayNotes.length;
+      $('dayNotesContainer').innerHTML = dayNotes.length === 0
+        ? '<i style="color:#64748b; font-size:13px;">Bu tarihe ait kaydedilmiş not bulunmamaktadır.</i>'
+        : dayNotes.map(n => `
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin-bottom:8px; color:#1e293b; border-left:4px solid #3b82f6;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <b style="font-size:14px;">${esc(n.title)}</b>
+              <span style="font-size:11px; background:#3b82f6; color:white; padding:2px 8px; border-radius:10px; font-weight:700;">${esc(n.tag)}</span>
             </div>
-            <div style="margin-top:6px; color:#334155; font-size:13.5px; line-height:1.5;">${n.body}</div>
-          </div>
-        `).join('');
-      }
+            <div style="margin-top:6px; color:#334155; font-size:13.5px; line-height:1.5; white-space:pre-wrap;">${esc(n.body)}</div>
+          </div>`).join('');
 
-      if (!rawSheetData) return;
+      if (!rawSheetData) { renderSheetsToContainer([], 'dayTablesContainer', 'rptSheetRowCount'); return; }
 
-      let sheetsWithMatchedRows = [];
-      const parts = dateStr.split('.'); 
-      const day = parts[0];
-      const month = parts[1];
-      const year = parts[2];
-      
-      const isoDate = `${year}-${month}-${day}`;       
-      const shortDate = `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`; 
-
-      rawSheetData.forEach(sheet => {
-        if (sheet.sheetName.toLowerCase() === "notlarim") return; 
-        if (!sheet.rows || sheet.rows.length < 2) return;
-
-        const headers = sheet.rows[0];
-        let sheetMatchedRows = [];
-
-        for (let i = 1; i < sheet.rows.length; i++) {
-          const row = sheet.rows[i];
-          let isExactDateMatch = false;
-
-          for (let j = 0; j < row.length; j++) {
-            const cellVal = String(row[j] || "").trim();
-            if (
-              cellVal === dateStr || 
-              cellVal === shortDate || 
-              cellVal === isoDate ||
-              cellVal.includes(dateStr) || 
-              cellVal.includes(isoDate)
-            ) {
-              if (!cellVal.includes("sayfa") && cellVal.length < 25) {
-                isExactDateMatch = true;
-                break;
-              }
-            }
-          }
-
-          if (isExactDateMatch) {
-            sheetMatchedRows.push(row);
-          }
-        }
-
-        if (sheetMatchedRows.length > 0) {
-          sheetsWithMatchedRows.push({
-            sheetName: sheet.sheetName,
-            headers: headers,
-            rows: sheetMatchedRows
-          });
-        }
+      const hits = dateIndex.get(dateStr) || [];
+      const bySheet = new Map();
+      hits.forEach(([si, ri]) => {
+        if (!bySheet.has(si)) bySheet.set(si, []);
+        bySheet.get(si).push(rawSheetData[si].rows[ri]);
       });
-
-      renderSheetsToContainer(sheetsWithMatchedRows, 'dayTablesContainer', 'rptSheetRowCount');
+      const result = [...bySheet.entries()].map(([si, rows]) => ({
+        sheetName: rawSheetData[si].sheetName, headers: rawSheetData[si].rows[0], rows
+      }));
+      renderSheetsToContainer(result, 'dayTablesContainer', 'rptSheetRowCount');
     }
 
+    /* =========================================================
+       ANALİZ
+       ========================================================= */
     function runSmartDataAnalysis() {
-      const inputQuery = document.getElementById('sheetQueryInput').value.trim();
-      if (!rawSheetData) return alert("E-Tablo verisi yüklenemedi.");
-      if (!inputQuery) return alert("Lütfen aramak istediğiniz kelimeyi girin.");
+      const input = $('sheetQueryInput').value.trim();
+      if (!rawSheetData) return toast('E-Tablo verisi yüklenemedi. Önce eşitleyin.', 'warn');
+      if (!input) return toast('Lütfen aramak istediğiniz kelimeyi girin.', 'warn');
 
-      document.getElementById('analysisReportInfo').innerText = `Sorgu: "${inputQuery}"`;
+      $('analysisReportInfo').innerText = `Sorgu: "${input}"`;
+      const tokens = fold(input).split(/[\s,]+/).filter(Boolean);
+      const chosen = $('sheetSelect').value;
 
-      const queryTokens = inputQuery.toLowerCase().split(/[\s,]+/).filter(t => t.length > 0);
-      let targetSheetName = null;
+      let sheets = rawSheetData.filter(s => lc(s.sheetName) !== 'notlarim');
+      if (chosen) {
+        sheets = sheets.filter(s => s.sheetName === chosen);
+      } else {
+        const named = sheets.filter(s => tokens.some(t => fold(s.sheetName).includes(t)));
+        if (named.length) sheets = named;
+      }
 
-      rawSheetData.forEach(sheet => {
-        const sheetNameLower = sheet.sheetName.toLowerCase();
-        queryTokens.forEach(token => {
-          if (sheetNameLower.includes(token)) targetSheetName = sheet.sheetName;
-        });
-      });
-
-      const sheetsToScan = targetSheetName ? rawSheetData.filter(s => s.sheetName === targetSheetName) : rawSheetData;
-
-      let sheetsWithMatchedRows = [];
-      let totalRowsCount = 0;
-
-      sheetsToScan.forEach(sheet => {
+      const result = [];
+      let scanned = 0;
+      sheets.forEach(sheet => {
         const rows = sheet.rows;
         if (!rows || rows.length < 2) return;
-        const headers = rows[0];
-        let sheetMatchedRows = [];
-
+        const sheetFold = fold(sheet.sheetName);
+        const need = tokens.filter(t => !sheetFold.includes(t));
+        const matched = [];
         for (let i = 1; i < rows.length; i++) {
-          totalRowsCount++;
-          const row = rows[i];
-          const rowString = row.join(" ").toLowerCase();
-
-          const matchesSearchValues = queryTokens.every(val => rowString.includes(val));
-
-          if (matchesSearchValues) {
-            sheetMatchedRows.push(row);
-          }
+          scanned++;
+          const str = rows[i].map(c => fold(displayCell(c))).join(' ');
+          if (need.every(t => str.includes(t))) matched.push(rows[i]);
         }
-
-        if (sheetMatchedRows.length > 0) {
-          sheetsWithMatchedRows.push({
-            sheetName: sheet.sheetName,
-            headers: headers,
-            rows: sheetMatchedRows
-          });
-        }
+        if (matched.length) result.push({ sheetName: sheet.sheetName, headers: rows[0], rows: matched });
       });
 
-      document.getElementById('analysisMetricsBar').style.display = 'flex';
-      document.getElementById('analysisTotalCountTag').innerText = totalRowsCount;
+      lastAnalysis = { query: input, sheets: result };
+      $('analysisMetricsBar').style.display = 'flex';
+      $('analysisTotalCountTag').innerText = scanned;
+      renderSheetsToContainer(result, 'analysisTablesContainer', 'analysisMatchCountTag');
+    }
 
-      renderSheetsToContainer(sheetsWithMatchedRows, 'analysisTablesContainer', 'analysisMatchCountTag');
+    function exportAnalysisCsv() {
+      if (!lastAnalysis || !lastAnalysis.sheets.length) return toast('Önce bir analiz çalıştırın.', 'warn');
+      const csvCell = v => '"' + String(v === null || v === undefined ? '' : displayCell(v)).replace(/"/g, '""') + '"';
+      let out = '';
+      lastAnalysis.sheets.forEach(s => {
+        out += csvCell('SAYFA: ' + s.sheetName) + '\r\n';
+        out += s.headers.map(csvCell).join(';') + '\r\n';
+        s.rows.forEach(r => { out += s.headers.map((_, k) => csvCell(r[k])).join(';') + '\r\n'; });
+        out += '\r\n';
+      });
+      const blob = new Blob(['\uFEFF' + out], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'analiz-' + new Date().toISOString().slice(0, 10) + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      toast('CSV indirildi.', 'ok');
+    }
+
+    /* =========================================================
+       ÖZET (DASHBOARD)
+       ========================================================= */
+    function mkChart(id, cfg) {
+      if (typeof Chart === 'undefined') return;
+      if (charts[id]) charts[id].destroy();
+      const el = $(id);
+      if (el) charts[id] = new Chart(el, cfg);
+    }
+
+    function renderDashboard() {
+      const today = getTodayStr();
+      const sheetList = (rawSheetData || []).filter(s => lc(s.sheetName) !== 'notlarim');
+      const totalRows = sheetList.reduce((a, s) => a + Math.max(0, (s.rows ? s.rows.length : 0) - 1), 0);
+
+      const stats = [
+        ['fa-sticky-note', 'Toplam Not', notes.length, '#f59e0b'],
+        ['fa-calendar-day', 'Bugünkü Not', notes.filter(n => n.date === today).length, '#3b82f6'],
+        ['fa-thumbtack', 'Sabit Not', notes.filter(n => n.pinned).length, '#8b5cf6'],
+        ['fa-file-excel', 'E-Tablo Sayfası', sheetList.length, '#10b981'],
+        ['fa-database', 'Toplam Kayıt', totalRows.toLocaleString('tr-TR'), '#10b981'],
+        ['fa-hourglass-half', 'Bekleyen Not', pendingNotes.length, '#ef4444']
+      ];
+      $('statGrid').innerHTML = stats.map(s => `
+        <div class="stat-card">
+          <div class="stat-label"><i class="fa-solid ${s[0]}" style="color:${s[3]}"></i> ${s[1]}</div>
+          <div class="stat-value">${s[2]}</div>
+        </div>`).join('');
+
+      if (typeof Chart === 'undefined') return;
+      Chart.defaults.color = '#94a3b8';
+      Chart.defaults.borderColor = 'rgba(148,163,184,.15)';
+
+      const labels = [], noteCounts = [], dataCounts = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const key = `${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()}`;
+        labels.push(`${p2(d.getDate())}.${p2(d.getMonth() + 1)}`);
+        noteCounts.push(notes.filter(n => n.date === key).length);
+        dataCounts.push((dateIndex.get(key) || []).length);
+      }
+      mkChart('chartWeek', {
+        type: 'bar',
+        data: { labels, datasets: [
+          { label: 'Not', data: noteCounts, backgroundColor: '#f59e0b', borderRadius: 4 },
+          { label: 'E-Tablo kaydı', data: dataCounts, backgroundColor: '#10b981', borderRadius: 4 }
+        ] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+      });
+
+      const tagMap = {};
+      notes.forEach(n => { const t = n.tag || 'Genel'; tagMap[t] = (tagMap[t] || 0) + 1; });
+      const tagLabels = Object.keys(tagMap);
+      mkChart('chartTags', {
+        type: 'doughnut',
+        data: { labels: tagLabels.length ? tagLabels : ['Not yok'], datasets: [{
+          data: tagLabels.length ? tagLabels.map(t => tagMap[t]) : [1],
+          backgroundColor: tagLabels.length ? ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899'] : ['#334155'],
+          borderWidth: 0
+        }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+      });
+
+      const top = sheetList.map(s => [s.sheetName, Math.max(0, (s.rows ? s.rows.length : 0) - 1)])
+        .sort((a, b) => b[1] - a[1]).slice(0, 8);
+      mkChart('chartSheets', {
+        type: 'bar',
+        data: { labels: top.map(t => t[0]), datasets: [{ label: 'Kayıt', data: top.map(t => t[1]), backgroundColor: '#3b82f6', borderRadius: 4 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+      });
     }
   </script>
 </body>
